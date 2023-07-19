@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/login-sign.css">
+
+</head>
+<body>
+    <body>
+        <!-- <header>
+            <h1>Login Form</h1>
+        </header> -->
+        <main>
+            <form id="login_form" class="form_class" th:action="@{/adminloginConfirm}" method="post" th:object="${adminmoi}">
+                <div class="form_div">
+                    <label>Username:</label>
+                    <input class="field_class" type="text" placeholder="Username" th:field="*{taiKhoan}"  autofocus>
+<!--                      <div class="MessageBox" th:if="${#fields.hasErrors('taiKhoan')}" th:errors="*{taiKhoan}"></div>  -->
+                    	 <div th:if="${messageConfirmUserWrong}">
+                    	<h5 class="MessageBox" th:text="${messageConfirmUserWrong}"></h5>
+                    </div>  
+                    <label>Password:</label>
+                     <input class="field_class" type="password" placeholder="Password" th:field="*{matKhau}"> 
+<!--                      <div class="MessageBox" th:if="${#fields.hasErrors('matKhau')}" th:errors="*{matKhau}"></div>  -->
+                    	 <div th:if="${messageConfirmPassWrong}">
+                    	<h5 class="MessageBox" th:text="${messageConfirmPassWrong}"></h5>
+                    </div>
+                    <label>Ghi Nhớ:</label>	
+                    <input class="" type="checkbox" name="remember" value="true">
+                    <br>
+                    <button class="submit_class" type="submit" form="login_form">submit</button>
+                    <div th:if="${messageConfirmAuth}">
+                    	<h5 class="MessageBox" th:text="${messageConfirmAuth}"></h5>
+                    </div>  
+                </div>
+            </form>
+        </main>
+        <!-- <footer>
+            <p><a href="#"><img src="img/Ytb.png" alt=""></a></p>
+            <p><a href="#"><img src="img/Isg.png" alt=""></a></p>
+            <p>dessert shop<a href="#"> Come get it&trade;</a></p>
+        </footer> -->
+    </body>
+</body>
+</html>

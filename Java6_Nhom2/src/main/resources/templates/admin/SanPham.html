@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layouts/main-layout}">
+
+<head>
+<meta charset="utf-8">
+<title>Love shop</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Free HTML Templates" name="keywords">
+<meta content="Free HTML Templates" name="description">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+	rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+<body>
+			<div class="col py-3">
+				<!-- Aside End -->	
+				<!-- Content here -->
+				<div class="row px-xl-5" layout:fragment ="content">
+											<div class="tab-content">
+								<table id="example" class="display" style="width: 100%">
+									<thead>
+										<tr>
+											<td colspan="7">
+												<div class="input-group">
+													<form action="/admin/SanPham/search" method="post" class="input-group">
+														<input class="form-control" th:name="keywordtensptim" >
+														<button class="btn btn-primary">Search</button>
+													</form>
+												</div>
+											</td>
+											<td></td>
+										</tr>
+										<tr style="background-color: #D19C97; color: white;">
+											<th scope="col">Mã sản phẩm</th>
+											<th scope="col">Mã loại bánh</th>
+											<th scope="col">Tên sản phẩm</th>
+											<th scope="col">Số lượng</th>
+											<th scope="col">Ảnh</th>
+											<th scope="col">Ghi chú</th>
+											<th scope="col">Giá bán</th>
+											<th scope="col">Giá Nhập</th>
+											<th scope="col"></th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item : ${items}">
+ 											<td th:text="${item.maSP}"></td> 
+ 											<td th:text="${item.loaiBanh.maLoaiBanh}"></td> 
+											<td th:text="${item.tenSP}"></td>
+											<td th:text="${item.soLuong}"></td>
+											<!--<td th:text="${item.anh}"></td>-->
+											<td><img  style="width: 50%" th:src="@{'/img/' + ${item.anh}}" /></td>
+											<td th:text="${item.ghiChu}"></td>
+											<td th:text="${item.giaBan}"></td>
+											<td th:text="${item.giaNhap}"></td>
+ 											<td><a th:href="@{/admin/SanPham/edit/{id}(id=${item.maSP}, p=${currIndex})}">edit</a>
+												<a th:href="@{/admin/SanPham/delete/__${item.maSP}__}">delete</a></td> 
+										</tr>
+									</tbody>
+								</table>
+									<ul class="pagination">
+									    <li class="page-item"><a class="page-link"
+									        th:href="@{/admin/SanPham/page(p=${(currIndex != null) ? currIndex - 1 : 0})}"
+									        th:onclick="${currIndex==0} ? 'return false;' : null"
+									        th:style="${currIndex==0} ? 'background-color: #eee' : ''">Previous</a>
+									    </li>
+									    <li class="page-item"
+									        th:each="pageNumber : ${#numbers.sequence(0, numberOfPages != null ? numberOfPages - 1 : 0)}">
+									        <a class="page-link" th:href="@{/admin/SanPham/page(p=${pageNumber})}"
+									        th:style="${pageNumber == (currIndex != null ? currIndex : -1)} ? 'background-color: lightgrey' : 'background-color: white'"
+									        th:text="${pageNumber + 1}"></a>
+									    </li>
+									    <li class="page-item"><a class="page-link"
+									        th:href="@{/admin/SanPham/page(p=${(currIndex != null and numberOfPages != null) ? currIndex + 1 : 0})}"
+									        th:onclick="${currIndex == (numberOfPages != null ? numberOfPages - 1 : -1)} ? 'return false;' : null"
+									        th:style="${currIndex == (numberOfPages != null ? numberOfPages - 1 : -1)} ? 'background-color: #eee' : ''">Next</a>
+									    </li>
+									</ul>
+						
+								<h4 class="mb-3">Chỉnh sửa thông tin sản phẩm</h4>
+								<form th:action="@{/admin/SanPham/index}" th:object="${sanphamthem}" method="post">
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label>mã sản phẩm</label> <input 
+											type="text" readonly="true" class="form-control" 
+											placeholder="Nhập mã sản phẩm" th:field="*{maSP}" id="data-field">
+											<label>mã loại bánh</label>
+											<select class="form-control" th:field="*{loaiBanh.maLoaiBanh}">
+											    <option th:each="option : ${LBoptions}" 
+											            th:value="${option.key}"
+											            th:text="${option.value}">
+											    </option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label>Tên sản phẩm</label> <input
+											type="text" class="form-control"
+											placeholder="Nhập tên sản phẩm" th:field="*{tenSP}">
+											<div class="alert alert-warning" th:if="${#fields.hasErrors('tenSP')}" th:errors="*{tenSP}" oninput="checkMa()"></div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label>Số lượng</label> <input type="number"
+												class="form-control" placeholder="Nhập số lượng" th:field="*{soLuong}">
+												<div class="alert alert-warning" th:if="${#fields.hasErrors('soLuong')}" th:errors="*{soLuong}"></div>
+												
+										</div>
+										<div class="form-group col-md-6">
+											<label>Ảnh</label> <input type="file"
+												class="form-control" th:field="*{anh}" th:text="*{anh}">
+										</div>
+									</div>
+									<div class="form-group">
+										<label>Ghi chú</label> <input type="text" class="form-control"
+											placeholder="Nhập ghi chú" th:field="*{ghiChu}">
+											<div class="alert alert-warning" th:if="${#fields.hasErrors('ghiChu')}" th:errors="*{ghiChu}"></div>
+									</div>
+									<div class="form-group">
+										<label>Giá bán</label> <input type="number"
+											class="form-control" placeholder="Nhập giá nhập" th:field="*{giaBan}">
+											<div class="alert alert-warning" th:if="${#fields.hasErrors('giaBan')}" th:errors="*{giaBan}"></div>
+									</div>
+									<div class="form-group">
+										<label>Giá nhập</label> <input type="number" class="form-control"
+											placeholder="Nhập giá bán" th:field="*{giaNhap}">
+											<div class="alert alert-warning" th:if="${#fields.hasErrors('giaNhap')}" th:errors="*{giaNhap}"></div>
+									</div>
+									<div style="float: right;">
+										<button th:formaction="@{/admin/SanPham/create}" class="btn btn-primary" id="add-product-button">Thêm
+											mới</button>
+										<button th:formaction="@{/admin/SanPham/update}" class="btn btn-primary">Cập
+											nhật</button>
+										<button th:formaction="@{/admin/SanPham}" class="btn btn-primary">Làm 
+											mới</button>
+
+									</div>
+								</form>
+								<hr>
+							</div>
+						</div>
+					</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

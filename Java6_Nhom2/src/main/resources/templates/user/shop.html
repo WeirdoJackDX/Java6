@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{user/index.html}">
+
+<head>
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <!-- Page Header Start -->
+        <div class="container-fluid bg-secondary mb-5">
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 120px">
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Shop của chúng tôi</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="">Trang chủ</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0">cửa hàng</p>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header End -->
+
+
+        <form action="/user/shop/search" method="POST" class="align-items-center justify-content-center">
+            <!-- <div class="col-lg-6 col-6 text-left">
+                <input type="text" class="form-control" name="tuKhoa" th:value="${tuKhoa}"
+                    placeholder="Tìm kiếm hương vị mà bạn yêu thích">
+                <div class="input-group-append">
+                    <button type="submit" class="btn border" style="background-color: #faefee;">
+                        <i class="fa-sharp fa-solid fa-magnifying-glass fa-xl" style="color: #d19c97;"></i>
+                        <span>Tìm kiếm</span>
+                    </button>
+                </div>
+            </div> -->
+
+            <nav aria-label="Page navigation example" th:if="${page.totalPages > 1}">
+                <ul class="pagination text-center align-items-center justify-content-center">
+                    <li class="page-item"><a type="button" class="page-link"
+                            th:href="@{/user/shop/page?p=__${page.number - 1}__}"
+                            th:onclick="${page.number==0} ? 'return false;' : null"
+                            th:style="${page.number==0} ? 'background-color: #eee' : ''">Previous</a>
+                    </li>
+
+
+                    <div th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                        <li class="page-item"><a class="page-link btn btn-secondary"
+                                th:href="@{/user/shop/page?p=__${i}__}"
+                                th:style="${'background-color:' + (i==page.number?'lightgrey':'white')}"
+                                th:text="${i + 1}"></a></li>
+                    </div>
+
+                    <li class="page-item"><a type="button" class="page-link"
+                            th:href="@{/user/shop/page?p=__${page.number + 1}__}"
+                            th:onclick="${page.number==page.totalPages - 1} ? 'return false;' : null"
+                            th:style="${page.number==page.totalPages - 1} ? 'background-color: #eee' : ''">Next</a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- <ul>
+                <li>Số thực thể hiện tại: <span th:text="${page.numberOfElements}"></span></li>
+                <li>Trang số: <span th:text="${page.number}"></span></li>
+                <li>Kích thước trang: <span th:text="${page.size}"></span></li>
+                <li>Tổng số thực thể: <span th:text="${page.totalElements}"></span></li>
+                <li>Tổng số trang: <span th:text="${page.totalPages}"></span></li>
+            </ul> -->
+        </form>
+
+
+        <!-- Shop Start -->
+        <div class="container-fluid pt-5">
+            <div class="text-center mb-4">
+                <h2 class="section-title px-5"><span class="px-2">Sản phẩm nổi bật</span></h2>
+            </div>
+            <div class="row px-xl-5 pb-3">
+                <div class="col-lg-3 col-md-6 col-sm-12 pb-1" th:each="i : ${page.content}">
+                    <div class="card product-item border-0 mb-4">
+                        <div
+                            class="card-header product-img position-relative overflow-hidden bg-transparent border p-0 parent">
+                            <img class="img-fluid w-100" style="width: 326px;
+                        height: 326px;" th:src="@{/img/__${i.sanPham.anh}__}" alt="">
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                            <h6 class="text-cua-loi text-truncate mb-3 mr-1 "><span th:text="${i.sanPham.tenSP}"></span>
+                            </h6>
+                            <div class="d-flex justify-content-center">
+                                <h6><span th:text="${#numbers.formatCurrency(i.sanPham.giaBan)}"></span>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="card-footer justify-content-right bg-light border">
+                            <a th:href="@{/user/detail/index(maSP=${i.sanPham.maSP},maLoai=${i.sanPham.loaiBanh.maLoaiBanh})}"
+                                class="btn btn-sm text-dark p-0">
+                                <i class="fas fa-eye text-primary fa-xl mr-1"></i>Chi tiết
+                            </a>
+                            <a th:onclick="'addToGioHang(' + ${i.sanPham.maSP} + ')'"
+                                class=" btn btn-sm text-dark p-0"><i
+                                    class="fas fa-shopping-cart fa-xl text-primary mr-1" title="hehe"></i>Thêm vào
+                                giỏ</a>
+
+
+                            <a th:onclick="'likeSanPham(' + ${i.sanPham.maSP} + ')'" class="btn btn-sm text-dark">
+
+                                <span th:if="${i.thich != 0}"><i class="fa-solid fa-heart fa-xl text-primary mr-1"
+                                        th:id="'maSP' + ${i.sanPham.maSP}"></i></span>
+
+                                <span th:if="${i.thich == 0}"><i class="fa-regular fa-heart fa-xl text-primary mr-1"
+                                        th:id="'maSP' + ${i.sanPham.maSP}"></i></span>
+
+                            </a><span th:id="'luotThich' + ${i.sanPham.maSP}" th:text="${i.luotLike}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Shop End -->
+    </div>
+
+</body>
+
+</html>

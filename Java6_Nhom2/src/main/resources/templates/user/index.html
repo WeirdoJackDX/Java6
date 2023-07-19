@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="utf-8">
+	<title>Love Cake Web</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="Free HTML Templates" name="keywords">
+	<meta content="Free HTML Templates" name="description">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="/js/main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+		integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+		integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+	<div th:replace="~{user/header.html :: header}"> </div>
+
+	<div th:replace="~{user/loginModal.html :: loginModal}"> </div>
+
+	<div layout:fragment="content">
+
+		<!-- Navbar Start -->
+		<div class="container-fluid mb-5">
+			<div class="row border-top px-xl-5">
+
+				<div class="col-lg-12">
+
+					<div id="header-carousel" class="carousel slide" data-ride="carousel">
+						<div class="carousel-inner">
+							<div class="carousel-item active" style="height: 410px;">
+								<img class="img-fluid"
+									src=" http://cake.giaodienwebmau.com/wp-content/uploads/2022/09/slider_2.webp"
+									alt="Image">
+								<div
+									class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+									<div class="p-3" style="max-width: 700px;">
+										<h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First
+											Order</h4>
+										<h3 class="display-4 text-white font-weight-semi-bold mb-4">Fashionable Dress
+										</h3>
+										<a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+									</div>
+								</div>
+							</div>
+							<div class="carousel-item" style="height: 410px;">
+								<img class="img-fluid"
+									src="http://cake.giaodienwebmau.com/wp-content/uploads/2022/09/slider_1-1.webp"
+									alt="Image">
+								<div
+									class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+									<div class="p-3" style="max-width: 700px;">
+										<h4 class="text-light text-uppercase font-weight-medium mb-3">10% Off Your First
+											Order</h4>
+										<h3 class="display-4 text-white font-weight-semi-bold mb-4">Reasonable Price
+										</h3>
+										<a href="" class="btn btn-light py-2 px-3">Shop Now</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+							<div class="btn btn-dark" style="width: 45px; height: 45px;">
+								<span class="carousel-control-prev-icon mb-n2"></span>
+							</div>
+						</a>
+						<a class="carousel-control-next" href="#header-carousel" data-slide="next">
+							<div class="btn btn-dark" style="width: 45px; height: 45px;">
+								<span class="carousel-control-next-icon mb-n2"></span>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Navbar End -->
+
+		<!-- Offer Start -->
+		<div class="container-fluid offer pt-5">
+			<div class="row px-xl-5">
+				<div class="col-md-6 pb-4">
+					<div class="position-relative bg-secondary text-center text-md-right text-white mb-2 py-5 px-5">
+						<img src="/img/bread-3.png" alt="">
+						<div class="position-relative" style="z-index: 1;">
+							<h5 class="text-uppercase text-primary mb-3">Giảm 10% cho các loại bánh mì</h5>
+							<h1 class="mb-4 font-weight-semi-bold">Bánh mì là nguồn sống</h1>
+							<a href="" class="btn btn-outline-primary py-md-2 px-md-3">Xem thêm</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 pb-4">
+					<div class="position-relative bg-secondary text-center text-md-left text-white mb-2 py-5 px-5">
+						<img src="/img/chocolate-cake-1.png" alt="">
+						<div class="position-relative" style="z-index: 1;">
+							<h5 class="text-uppercase text-primary mb-3">Giảm 15% cho các loại bánh chocolate</h5>
+							<h1 class="mb-4 font-weight-semi-bold">Valentine's Day</h1>
+							<a href="" class="btn btn-outline-primary py-md-2 px-md-3">Xem thêm</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Offer End -->
+
+		<!-- Products Start -->
+		<div class="container-fluid pt-5">
+			<div class="text-center mb-4">
+				<h2 class="section-title px-5"><span class="px-2">Sản phẩm nổi bật</span></h2>
+			</div>
+			<div class="row px-xl-5 pb-3">
+				<div class="col-lg-3 col-md-6 col-sm-12 pb-1" th:each="i : ${items}">
+					<div class="card product-item border-0 mb-4">
+						<div
+							class="card-header product-img position-relative overflow-hidden bg-transparent border p-0 parent">
+							<img class="img-fluid w-100" style="width: 326px;
+                        height: 326px;" th:src="@{/img/__${i.sanPham.anh}__}" alt="">
+						</div>
+						<div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+							<h6 class="text-cua-loi text-truncate mb-3 mr-1 "><span th:text="${i.sanPham.tenSP}"></span>
+							</h6>
+							<div class="d-flex justify-content-center">
+								<h6><span th:text="${#numbers.formatCurrency(i.sanPham.giaBan)}"></span>
+								</h6>
+							</div>
+						</div>
+						<div class="card-footer justify-content-right bg-light border">
+							<a th:href="@{/user/detail/index(maSP=${i.sanPham.maSP},maLoai=${i.sanPham.loaiBanh.maLoaiBanh})}"
+								class="btn btn-sm text-dark p-0">
+								<i class="fas fa-eye text-primary fa-xl mr-1"></i>Chi tiết
+							</a>
+							<a th:onclick="'addToGioHang(' + ${i.sanPham.maSP} + ')'"
+								class=" btn btn-sm text-dark p-0"><i
+									class="fas fa-shopping-cart fa-xl text-primary mr-1" title="hehe"></i>Thêm vào
+								giỏ</a>
+							<a th:onclick="'likeSanPham(' + ${i.sanPham.maSP} + ')'" class="btn btn-sm text-dark">
+
+								<span th:if="${i.thich != 0}"><i class="fa-solid fa-heart fa-xl text-primary mr-1"
+										th:id="'maSP' + ${i.sanPham.maSP}"></i></span>
+
+								<span th:if="${i.thich == 0}"><i class="fa-regular fa-heart fa-xl text-primary mr-1"
+										th:id="'maSP' + ${i.sanPham.maSP}"></i></span>
+
+							</a><span th:id="'luotThich' + ${i.sanPham.maSP}" th:text="${i.luotLike}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Products End -->
+
+
+		<!-- Xem thêm start-->
+		<div class="col-md-2 offset-md-5 mb-5">
+			<form action="/user/search">
+				<div>
+					<button class="btn btn-primary btn-block border-0 py-3" title="hehe" type="submit">Xem thêm
+					</button>
+				</div>
+			</form>
+		</div>
+		<!-- Xem thêm end-->
+
+	</div>
+	<!-- Footer Start -->
+	<div th:replace="~{user/footer.html :: footer}"></div>
+	<!-- Footer End -->
+
+	<span th:if="${dangKy}">
+		<script>
+			window.onload = function () {
+				thongBao('success', 'Đăng kí tài khoản thành công!');
+			};
+		</script>
+	</span>
+
+	<span th:if="${dangXuat}">
+		<script>
+			window.onload = function () {
+				thongBao('success', 'Đăng xuất thành công!');
+			};
+		</script>
+	</span>
+
+	<span th:if="${dangNhap}">
+		<script>
+			window.onload = function () {
+				thongBao('success', 'Đăng nhập thành công!');
+			};
+		</script>
+	</span>
+
+	<script>
+		$(document).ready(function () {
+			// Lắng nghe sự kiện thay đổi giá trị của ô input
+			$("#inputMK1, #inputMK2").on("input", function () {
+				// Ẩn thông báo lỗi
+				$("#thongBaoLoi").hide();
+			});
+		});
+
+		$(document).ready(function () {
+			var loginModal = $('#loginModal');
+			var alertElement = $('#alertLogin');
+
+			loginModal.on('hide.bs.modal', function () {
+				alertElement.hide();
+			});
+		});
+
+		$(document).ready(function () {
+			$('#nutDangNhap').click(function (event) {
+				event.preventDefault(); // Ngăn chặn hành vi mặc định của nút submit
+
+				// Lấy dữ liệu từ form
+				var taiKhoan = $('#taiKhoanLogin').val();
+				var matKhau = $('#matKhauLogin').val();
+
+				// Gửi yêu cầu AJAX
+				$.ajax({
+					url: '/user/login', // Đường dẫn tới controller xử lý đăng nhập
+					type: 'POST',
+					data: {
+						taiKhoan: taiKhoan,
+						matKhau: matKhau
+					},
+					success: function (response) {
+						if (response.success) {
+							location.reload();
+						} else {
+							var alertElement = document.getElementById('alertLogin');
+
+							var alertValue = 'Tài khoản hoặc mật khẩu không chính xác';
+							// Cập nhật nội dung của thẻ alert
+							alertElement.textContent = alertValue;
+
+							// Hiện thẻ alert
+							alertElement.style.display = 'block';
+
+						}
+					},
+					error: function (xhr, status, error) {
+						console.log("Lỗi AJAX: " + error);
+					}
+				});
+			});
+		});
+	</script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+		integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layouts/main-layout}">
+
+<head>
+	<meta charset="utf-8">
+	<title>Love shop</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="Free HTML Templates" name="keywords">
+	<meta content="Free HTML Templates" name="description">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+	<div class="col py-3">
+		<!-- Aside End -->
+		<!-- Content here -->
+		<div class="row px-xl-5" layout:fragment="content">
+			<div class="col">
+				<div class="tab-content">
+					<h4 class="mb-3">Danh sách hóa đơn</h4>
+					<table id="example" class="display" style="width: 100%">
+						<thead>
+							<tr>
+								<td colspan="7">
+									<div class="input-group">
+										<form class="input-group" action="/staff/order/search" method="post">
+											<input th:name="hoTen" class="form-control" placeholder="Tìm kiếm">
+											<button type="submit" class="btn btn-primary">Tìm
+												kiếm</button>
+										</form>
+									</div>
+								</td>
+							</tr>
+							<tr style="background-color: #D19C97; color: white;">
+								<th scope="col">Mã hóa đơn</th>
+								<th scope="col">Tên người dùng</th>
+								<th scope="col">Mã voucher</th>
+								<th scope="col">Ngày tạo</th>
+								<th scope="col">Tiền giảm</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item : ${items}">
+								<td th:text="${item.maHoaDon}"></td>
+								<td th:text="${item.nguoiDung.hoTen}"></td>
+								<td th:text="${item.Voucher.maVoucher}"></td>
+								<td th:text="${item.ngayTao}"></td>
+								<td th:text="${item.tienGiam}"></td>
+								<td>
+									<a th:href="@{/staff/order/edit/{id}(id=${item.maHoaDon}, p=${currIndex})}">Xem
+										chi tiết</a>
+									<a th:href="@{/staff/order/edit/{id}(id=${item.maHoaDon}, p=${currIndex})}">Sửa</a>
+									<!-- 											<a th:href="@{/staff/order/delete/{id}(id=${item.maHoaDon}, p=${currIndex})}">Xóa</a> -->
+
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link" th:href="@{/order/page(p=${currIndex-1})}"
+								th:onclick="${currIndex==0} ? 'return false;' : null"
+								th:style="${currIndex==0} ? 'background-color: #eee' : ''">Previous</a>
+						</li>
+						<li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, numberOfPages - 1)}">
+							<a class="page-link" th:href="@{/order/page(p=${pageNumber})}"
+								th:style="${'background-color:' + (pageNumber==currIndex?'lightgrey':'white')}"
+								th:text="${pageNumber + 1}"></a>
+						</li>
+						<li class="page-item"><a class="page-link" th:href="@{/order/page(p=${currIndex+1})}"
+								th:onclick="${currIndex==numberOfPages - 1} ? 'return false;' : null"
+								th:style="${currIndex==numberOfPages - 1} ? 'background-color: #eee' : ''">Next</a>
+						</li>
+					</ul>
+				</div>
+				<h4 class="mb-3">Chỉnh sửa hóa đơn</h4>
+				<form action="/staff/order" th:object="${hoaDon}" method="post">
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>Mã hóa đơn</label> <input th:readonly="true" type="text" class="form-control"
+								placeholder="Mã hóa đơn" th:field="*{maHoaDon}">
+						</div>
+						<div class="form-group col-md-6">
+							<label>Tên người dùng</label> <select class="form-control" th:field="*{nguoiDung.maND}">
+								<option th:each="option : ${NDoptions}" th:value="${option.key}"
+									th:text="${option.value}"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Mã voucher</label>
+							<select class="form-control" th:field="*{voucher.maVoucher}">
+								<option th:each="option : ${VCoptions}" th:value="${option.key}"
+									th:text="${option.value}"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Ngày tạo</label> <input type="date" class="form-control" placeholder="Ngày tạo"
+								name="dob" th:field="*{ngayTao}">
+						</div>
+						<div class="form-group col-md-6">
+							<label>Tiền giảm</label> <input type="text" class="form-control" placeholder="Tiền giảm"
+								th:field="*{tienGiam}">
+						</div>
+						<div style="float: right;">
+							<button type="submit" class="btn btn-primary" th:formaction="@{/createorder}">Thêm</button>
+							<button type="submit" class="btn btn-primary" th:formaction="@{/updateorder}">Cập
+								nhật</button>
+							<button type="submit" class="btn btn-primary" th:formaction="@{/staff/order}">Mới</button>
+						</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

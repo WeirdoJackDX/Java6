@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{user/index.html}">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found</title>
+    <!-- Nạp CSS của Bootstrap -->
+    <style>
+        /* Tùy chỉnh CSS */
+        .hehe {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .error-container {
+            text-align: center;
+        }
+
+        .error-404 {
+            font-size: 20rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="hehe">
+            <div class="error-container">
+                <h1 class="error-404">404</h1>
+                <h1>Page Not Found</h1>
+                <h5>Không tìm thấy trang hoặc bạn không có quyền truy cập</h5>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nạp JS của Bootstrap -->
+</body>
+
+</html>

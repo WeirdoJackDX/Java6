@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{user/index.html}">
+
+<head>
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div>
+            <div style="margin: auto;">
+
+
+                <form class="form-horizontal" id="myForm" th:object="${nguoiDung2}" th:action="@{/user/signup/check}"
+                    method="POST">
+                    <!-- Form Name -->
+
+                    <!-- Text input-->
+                    <div class=" form-group col-lg-5" style="margin: auto;">
+                        <!-- <span class="text-primary font-weight-bold border px-1100 mr-1"></span> -->
+                        <h1 class="m-0 display-5 font-weight-semi-bold"><span
+                                class="text-primary font-weight-bold mr-1">Kết
+                                nối với chúng tôi</span></h1>
+                        <!-- <h1></h1> -->
+                        <legend>Đăng ký tài khoản của bạn</legend>
+                        <label class="control-label" for="textinput">Họ và tên</label>
+                        <input id="textinput" th:field="*{hoTen}" placeholder="Họ và tên..."
+                            class="form-control input-md" required="" type="text">
+                        <span class="help-block"> </span>
+
+                        <label class="control-label" for="textinput">Email</label>
+                        <input id="textinput" th:field="*{email}" placeholder="Email...." class="form-control input-md"
+                            required="" type="email">
+                        <span class="help-block"> </span>
+
+                        <label class="control-label" for="textinput">Tài khoản</label>
+                        <input id="textinput" th:field="*{taiKhoan}" placeholder="Tài khoản..."
+                            class="form-control input-md" required="" type="text">
+                        <span class="help-block"> </span>
+
+
+
+                        <label class="control-label" for="textinput">Mật khẩu</label>
+                        <input id="inputMK1" name="matKhau3" th:value="${param.matKhau3}" placeholder="Mật khẩu..."
+                            class="form-control input-md" required="" type="password">
+                        <span class="help-block"> </span>
+
+                        <label class="control-label" for="textinput">Xác nhận mật khẩu</label>
+                        <input id="inputMK2" name="matKhau2" th:value="${param.matKhau2}"
+                            placeholder="Xác nhận mật khẩu...." class="form-control input-md" required=""
+                            type="password">
+                        <span class="help-block" style="color: red; font-size: small;" id="thongBaoLoi"
+                            th:text="${message}"></span>
+                        <br>
+                        <div class="alert alert-success" role="alert" th:if="${messageSucc}">
+                            <span th:text="${messageSucc}"></span>
+                        </div>
+
+                        <label class="control-label" for="singlebutton"> </label>
+                        <br>
+
+                        <button id="singlebutton" class="btn btn-primary">Đăng ký</button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

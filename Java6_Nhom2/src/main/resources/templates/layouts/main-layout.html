@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- <html xmlns:th="http://www.thymeleaf.org"> -->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="utf-8">
+	<title>Love shop</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="Free HTML Templates" name="keywords">
+	<meta content="Free HTML Templates" name="description">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+	<!-- Topbar Start -->
+	<div class="container-fluid">
+		<div class="row align-items-center py-3 px-xl-5">
+			<div class="col-lg-3 d-none d-lg-block">
+				<a href="/home/index" class="text-decoration-none">
+					<h1 class="m-0 display-5 font-weight-semi-bold">
+						<span class="text-primary font-weight-bold border px-3 mr-1">Love</span>CAKE
+					</h1>
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- Topbar End -->
+	<!-- Aside Start -->
+	<div class="container-fluid">
+		<div class="row flex-nowrap">
+			<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light Aside-light">
+				<div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+					<ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+						id="menu">
+						<li>
+							<div class="nav-item ml-auto py-0">
+								<a href="/admin/reportSanPhamTheoLoai" class="nav-item nav-link">Thống kê của admin</a>
+							</div>
+						</li>
+						<li>
+							<div class="nav-item ml-auto py-0">
+								<a href="/staff/report/star-report" class="nav-item nav-link">Thống kê</a>
+							</div>
+						</li>
+						<li>
+							<div class="nav-item dropdown">
+								<a href="" class="nav-link dropdown-toggle" data-toggle="dropdown">Nhân viên</a>
+								<div class="dropdown-menu rounded-0 m-0">
+									<a href="/staff/client" class="dropdown-item">Quản lý khách hàng</a>
+									<a href="/staff/comment" class="dropdown-item">Quản lý bình luận</a>
+									<a href="/staff/cart-detail" class="dropdown-item">Quản lý giỏ hàng của khách
+										hàng</a>
+
+									<a href="/staff/order" class="dropdown-item">Quản lý đơn hàng</a>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="nav-item dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">ADMIN</a>
+								<div class="dropdown-menu rounded-0 m-0">
+									<a href="/admin/staff" class="dropdown-item">Quản
+										lý nhân viên</a>
+									<hr>
+									<a href="/admin/SanPham" class="dropdown-item">Quản lý sản
+										phẩm</a> <a href="/admin/Voucher" class="dropdown-item">Quản lý khuyến mãi</a>
+									<a href="/admin/NhapKho" class="dropdown-item">Quản lý kho hàng</a>
+									<a href="/admin/productcatalog" class="dropdown-item">Quản lý danh sách sản phẩm</a>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="nav-item ml-auto py-0">
+								<a th:href="@{/logoutquanly}" class="nav-item nav-link">Log out</a>
+							</div>
+						</li>
+					</ul>
+					<hr>
+				</div>
+			</div>
+			<div>
+				<!-- Aside End -->
+				<!-- Content here -->
+				<div class="row px-xl-5" layout:fragment="content"></div>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

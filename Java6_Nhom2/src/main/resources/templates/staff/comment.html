@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- <html xmlns:th="http://www.thymeleaf.org"> -->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layouts/main-layout}">
+
+<head>
+	<meta charset="utf-8">
+	<title>Love shop</title>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="Free HTML Templates" name="keywords">
+	<meta content="Free HTML Templates" name="description">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+
+<body>
+	<div class="col py-3">
+		<!-- Aside End -->
+		<!-- Content here -->
+		<div class="row px-xl-5" layout:fragment="content">
+			<div class="col">
+				<div class="tab-content">
+					<h4 class="mb-3">Danh sách bình luận</h4>
+
+
+
+					<table id="example" class="display" style="width: 100%">
+						<thead>
+							<tr>
+								<td colspan="7">
+									<div class="input-group">
+										<form class="input-group" action="/staff/comment/search" method="post">
+											<input th:name="hoTen" th:value="${hoTen}" class="form-control"
+												placeholder="Tìm kiếm">
+											<button type="submit" class="btn btn-primary">Tìm
+												kiếm</button>
+										</form>
+									</div>
+								</td>
+							</tr>
+							<tr style="background-color: #D19C97; color: white;">
+								<th scope="col">Mã đánh giá</th>
+								<th scope="col"><a th:href="@{/staff/comment/sort(field='nguoiDung.hoTen')}"
+										style="color:white">Tên người dùng</a></th>
+								<th scope="col"><a th:href="@{/staff/comment/sort(field='sanPham.tenSP')}"
+										style="color:white">Tên sản phẩm</a></th>
+								<th scope="col"><a th:href="@{/staff/comment/sort(field='saoDanhGia')}"
+										style="color:white">Sao đánh giá</a></th>
+								<th scope="col"><a th:href="@{/staff/comment/sort(field='moTa')}" style="color:white">Mô
+										tả</a></th>
+								<th scope="col"><a th:href="@{/staff/comment/sort(field='ngayDanhGia')}"
+										style="color:white">Ngày đánh giá</a></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="item : ${items}">
+								<td th:text="${item.maDanhGia}"></td>
+								<td th:text="${item.nguoiDung.hoTen}"></td>
+								<td th:text="${item.sanPham.tenSP}"></td>
+								<td th:text="${item.saoDanhGia}" style="text-align: center"></td>
+								<td th:text="${item.moTa}"></td>
+								<td th:text="${item.ngayDanhGia}"></td>
+								<td><a
+										th:href="@{/staff/comment/edit/{id}(id=${item.maDanhGia}, p=${currIndex})}">Sửa</a>
+									<a
+										th:href="@{/staff/comment/delete/{id}(id=${item.maDanhGia}, p=${currIndex})}">Xóa</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link"
+								th:href="@{/comment/page(p=${currIndex-1},hoTen=${hoTen})}"
+								th:onclick="${currIndex==0} ? 'return false;' : null"
+								th:style="${currIndex==0} ? 'background-color: #eee' : ''">Previous</a>
+						</li>
+						<li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, numberOfPages - 1)}">
+							<a class="page-link" th:href="@{/comment/page(p=${pageNumber},hoTen=${hoTen})}"
+								th:style="${'background-color:' + (pageNumber==currIndex?'lightgrey':'white')}"
+								th:text="${pageNumber + 1}"></a>
+						</li>
+						<li class="page-item"><a class="page-link"
+								th:href="@{/comment/page(p=${currIndex+1},hoTen=${hoTen})}"
+								th:onclick="${currIndex==numberOfPages - 1} ? 'return false;' : null"
+								th:style="${currIndex==numberOfPages - 1} ? 'background-color: #eee' : ''">Next</a>
+						</li>
+					</ul>
+				</div>
+				<h4 class="mb-3">Chỉnh sửa giỏ hàng</h4>
+				<form action="/staff/comment" th:object="${danhGia}" method="post">
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>Mã đánh giá</label> <input type="text" class="form-control" placeholder="Mã đánh giá"
+								readonly="true" th:field="*{maDanhGia}">
+						</div>
+						<div class="form-group col-md-6">
+							<label>Tên người dùng</label> <select class="form-control" th:field="*{nguoiDung.maND}">
+								<option th:each="option : ${NDoptions}" th:value="${option.key}"
+									th:text="${option.value}">
+								</option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Tên sản phẩm</label> <select class="form-control" th:field="*{sanPham.maSP}">
+								<option th:each="option : ${SPoptions}" th:value="${option.key}"
+									th:text="${option.value}">
+								</option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Mô tả</label>
+							<select th:field=*{saoDanhGia}>
+								<option th:each="number : ${#numbers.sequence(0, 5)}" th:value="${number}"
+									th:text="${number}"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Mô tả</label> <input type="text" class="form-control" placeholder="Mô tả"
+								th:field="*{moTa}">
+							<div class="alert alert-warning" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}">
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Ngày đánh giá</label> <input class="form-control" type="date" name="dob"
+								th:field="*{ngayDanhGia}" />
+						</div>
+						<div style="float: right;">
+							<button type="submit" class="btn btn-primary"
+								th:formaction="@{/createcomment}">Thêm</button>
+							<button type="submit" class="btn btn-primary" th:formaction="@{/updatecomment}">Cập
+								nhật</button>
+							<button type="submit" class="btn btn-primary" th:formaction="@{/staff/comment}">Mới</button>
+							<button type="submit" class="btn btn-primary" th:formaction="@{/staff/comment/sortName}">Sắp
+								xếp theo tên</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
