@@ -59,9 +59,9 @@
             </a>
             <input type="hidden" th:value="${nguoiDung.maND}" id="maND">
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" th:onclick="dangXuat()" href="">Đăng xuất</a>
+              <a class="dropdown-item" th:href="@{/user/info}">Cập nhật tài khoản</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="">Cập nhật tài khoản</a>
+              <a class="dropdown-item" th:onclick="dangXuat()" href="">Đăng xuất</a>
             </div>
           </li>
         </div>

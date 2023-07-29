@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -132,7 +134,6 @@ public class HomeController {
 				} else {
 					demo(nguoiDung.getEmail(), "", "");
 					nguoiDung.setVaiTro(0);
-					nguoiDung.setGioiTinh(dangKy);
 					nguoiDungDAO.save(nguoiDung);
 					this.dangKy = true;
 					return "redirect:/user/home/index";
@@ -303,7 +304,7 @@ public class HomeController {
 		return "/user/index";
 	}
 
-	@GetMapping("/user/error404")
+	@GetMapping("/error404")
 	public String error(Model model) {
 		header(model);
 		return "user/pageNotFound";
@@ -335,7 +336,30 @@ public class HomeController {
 	@RequestMapping("/user/signup/form")
 	public String signup(Model model, @ModelAttribute("nguoiDung2") NguoiDung nguoiDung) {
 		header(model);
+		nguoiDung.setGioiTinh(true);
 		return "user/signup";
+	}
+
+	@RequestMapping("/user/info")
+	public String changeInfo(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
+		header(model);
+		nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
+		NguoiDung user = nguoiDungDAO.findById(nguoiDung.getMaND()).get();
+		model.addAttribute("user", user);
+		return "user/changeInfo";
+	}
+
+	@ResponseBody
+	@PostMapping("/user/info/check")
+	public String infoCheck(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user.setHoTen(nguoiDung.getHoTen());
+		user.setEmail(nguoiDung.getEmail());
+		user.setDiaChi(nguoiDung.getDiaChi());
+		user.setSdt(nguoiDung.getSdt());
+		user.setGioiTinh(nguoiDung.getGioiTinh());
+		nguoiDungDAO.save(user);
+		return "redirect:/user/home/index";
 	}
 
 	@ResponseBody
