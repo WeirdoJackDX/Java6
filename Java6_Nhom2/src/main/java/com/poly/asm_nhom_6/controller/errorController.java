@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class errorController {
-	@RequestMapping("/errorPage")
-	public String erorr(Model model, @RequestParam("error") String error) {
-		model.addAttribute("message", error);
-		return "errorAdmin/error";
-	}
+//	@RequestMapping("/errorPage")
+//	public String erorr(Model model, @RequestParam("error") String error) {
+//		model.addAttribute("message", error);
+//		return "errorAdmin/error";
+//	}
 }
