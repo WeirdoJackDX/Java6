@@ -85,9 +85,12 @@
 
 							<div class="card-body card-block">
 
-								<form method="post" th:object="${loai}">							
-								<div class="form-group"> <label for="nf-email" class=" form-control-label">Tên</label>
-								
+								<form method="post" th:object="${loai}">		
+									<div class="form-group" th:if="${loai.maLoaiBanh != null}"> <label for="nf-email" class=" form-control-label">Mã Loại</label>								
+										<input th:value="${loai.maLoaiBanh}"  type="text" id="maLoaiBanh" name="maLoaiBanh" class="form-control" readonly>
+									</div>
+												
+									<div class="form-group"> <label for="nf-email" class=" form-control-label">Tên</label>
 										<input th:value="${loai.tenLoaiBanh}"  type="text" id="tenLoaiBanh" placeholder="Tên.." name="tenLoaiBanh" class="form-control">
 									</div>
 
@@ -99,7 +102,7 @@
 									type="submit" class="btn btn-primary btn-sm">
 										<i class="fa fa-dot-circle-o"></i> Thêm
 									</button>
-									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm">
+									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/edit/submit}">
 										<i class="fa fa-dot-circle-o"></i> Cập nhật
 									</button>
 									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/delete/__${loai.maLoaiBanh}__}"  >

@@ -57,12 +57,20 @@ public class AdminContrller {
 		}else {
 			loai.setGhiChu(ghiChu);
 			loaiBanhdao.save(loai);
+			Reset(loai);
 			
 		}
 		System.out.println(loai.getGhiChu());
 		List<LoaiBanh> list = loaiBanhdao.findAll();
 		model.addAttribute("loaibanh", list);
 		return "admin/loaisanpham";
+	}
+	//update
+	@RequestMapping("trangchu/loaisanpham/edit/submit")
+	public String Update(@ModelAttribute("loai") LoaiBanh loai) {
+		loaiBanhdao.save(loai);
+		return "redirect:/trangchu/loaisanpham";
+		
 	}
 	
 	//Xóa loại
@@ -75,8 +83,9 @@ public class AdminContrller {
 		return "redirect:/trangchu/loaisanpham";
 	}
 	
+	//Làm mới 
 	@RequestMapping("/trangchu/loaisanpham/reset/submit")
-	public String Reset(Model model, @ModelAttribute("loai") LoaiBanh loai) {
+	public String Reset(@ModelAttribute("loai") LoaiBanh loai) {
 		loai.setSanPhams(null);
 		loai.setGhiChu(null);
 		return  "redirect:/trangchu/loaisanpham";
