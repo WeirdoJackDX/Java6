@@ -1,11 +1,11 @@
 package com.poly.asm_nhom_6.controller;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,18 +14,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.poly.asm_nhom_6.DAO.ChiTietHoaDonDAO;
 import com.poly.asm_nhom_6.DAO.GioHangChiTietDAO;
+import com.poly.asm_nhom_6.DAO.HoaDonDAO;
 import com.poly.asm_nhom_6.DAO.LoaiBanhDAO;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.DAO.SanPhamDAO;
 import com.poly.asm_nhom_6.DAO.ThichSanPhamDAO;
+import com.poly.asm_nhom_6.model.ChiTietHoaDon;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
+import com.poly.asm_nhom_6.model.HoaDon;
 import com.poly.asm_nhom_6.model.NguoiDung;
 import com.poly.asm_nhom_6.model.ReportLike;
 import com.poly.asm_nhom_6.model.SanPham;
@@ -63,6 +67,12 @@ public class HomeController {
 
 	@Autowired
 	MailerServiceImpl mailer;
+
+	@Autowired
+	HoaDonDAO hoaDonDAO;
+
+	@Autowired
+	ChiTietHoaDonDAO cthdDAO;
 
 	public void demo(String email, String subject, String body) {
 		mailer.queue(email, subject, body);
@@ -349,7 +359,6 @@ public class HomeController {
 		return "user/changeInfo";
 	}
 
-	@ResponseBody
 	@PostMapping("/user/info/check")
 	public String infoCheck(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
@@ -394,6 +403,33 @@ public class HomeController {
 	public String contact(Model model) {
 		header(model);
 		return "user/contact";
+	}
+
+	@RequestMapping("/user/cart/purchase")
+	public String invoice() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user = nguoiDungDAO.findById(user.getMaND()).get();
+		HoaDon hd = new HoaDon(null, null, timestamp, null, user, null);
+		hoaDonDAO.save(hd);
+		for (GioHangChiTiet ghct : user.getGioHangChiTiets()) {
+			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
+					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
+			cthdDAO.save(cthd);
+		}
+		HoaDon recent = hoaDonDAO.getRecentReceipt(user.getMaND());
+		System.out.println(recent.getMaHoaDon());
+		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
+	}
+
+	@RequestMapping("/user/invoice/{id}")
+	public String invoiceDetail(@PathVariable("id") Integer id, Model model) {
+		HoaDon hd = hoaDonDAO.findById(id).get();
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user = nguoiDungDAO.findById(user.getMaND()).get();
+		model.addAttribute("user", user);
+		model.addAttribute("hd", hd);
+		return "/user/invoice";
 	}
 
 	// @ResponseBody
