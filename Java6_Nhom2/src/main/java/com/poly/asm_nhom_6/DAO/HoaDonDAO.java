@@ -14,6 +14,9 @@ public interface HoaDonDAO extends JpaRepository<HoaDon, Integer> {
 	@Query("SELECT hd FROM HoaDon hd INNER JOIN hd.nguoiDung nd WHERE nd.hoTen LIKE ?1")
 	Page<HoaDon> findByHoTenContaining(String hoTen, Pageable pageable);
 
+	@Query("SELECT p FROM HoaDon p WHERE p.nguoiDung.maND = ?1")
+	Page<HoaDon> findHoaDonByMaND(Integer maND, Pageable pageable);
+
 	@Query("SELECT p FROM HoaDon p WHERE p.nguoiDung.maND LIKE ?1 ORDER BY p.maHoaDon DESC LIMIT 1")
 	HoaDon getRecentReceipt(Integer id);
 }

@@ -7,14 +7,14 @@
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta content="Free HTML Templates" name="keywords">
 	<meta content="Free HTML Templates" name="description">
-	<script th:src="@{/js/cart.js}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
 		integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 
-<body>
+<body ng-app="app" ng-controller="cart-ctrl">
 	<div layout:fragment="content">
 		<!-- Page Header Start -->
 		<div class="container-fluid bg-secondary mb-5">
@@ -30,7 +30,7 @@
 		<!-- Page Header End -->
 
 		<!-- Cart Start -->
-		<div class="container-fluid pt-5">
+		<div class="container-fluid pt-5" ng-show="db.products.length > 0">
 			<div class="row px-xl-5">
 				<div class="col-lg-12 table-responsive mb-5">
 					<table class="table table-bordered text-center mb-0">
@@ -45,16 +45,45 @@
 							</tr>
 						</thead>
 						<tbody class="align-middle">
-							<tr th:each="cartDetail : ${user.gioHangChiTiets}" th:id="'cart_'+${cartDetail.maGioHang}">
+							<tr ng-repeat="item in db.products">
 								<td class="align-left">
-									<img th:src="${'/img/'+cartDetail.sanPham.anh}" class="img-fluid" alt=""
+									<img ng-src="/img/{{item.sanPham.anh}}" class="img-fluid" alt=""
 										style="width: 60px;">
+								</td>
+								<td class="align-middle">
+									<b>{{item.sanPham.tenSP}}</b>
+								</td>
+								<td class="align-middle">{{item.sanPham.giaBan | number}}VND</td>
+								<td class="align-middle">
+									<div class="input-group quantity mx-auto" style="width: 100px;">
+										<div class="input-group-btn">
+											<button class="btn btn-sm btn-primary btn-minus"
+												ng-click="update(item.maGioHang, item.soLuong, 0)">
+												<i class="fa fa-minus"></i>
+											</button>
+										</div>
+										<input type="text" class="form-control form-control-sm bg-secondary text-center"
+											min="1" ng-value="{{item.soLuong}}" disabled>
+										<div class="input-group-btn">
+											<button class="btn btn-sm btn-primary btn-plus"
+												ng-click="update(item.maGioHang, item.soLuong, 1)">
+												<i class="fa fa-plus"></i>
+											</button>
+										</div>
+									</div>
+								</td>
+								<td class="align-middle">{{item.sanPham.giaBan * item.soLuong | number}}VND</td>
+								<td class="align-middle"><button class="btn btn-sm btn-primary"
+										ng-click="delete(item.maGioHang)"><i class="fa fa-times"></i></button></td>
+							</tr>
+							<!-- <tr th:each="cartDetail : ${user.gioHangChiTiets}" th:id="'cart_'+${cartDetail.maGioHang}">
+								<td class="align-left">
+									<img th:src="${'/img/'+cartDetail.sanPham.anh}" class="img-fluid" alt="" style="width: 60px;">
 								</td>
 								<td class="align-middle">
 									<b th:text="${cartDetail.sanPham.tenSP}"></b>
 								</td>
-								<td class="align-middle" th:id="${cartDetail.maGioHang}+'_'+giaBan"
-									th:text="${cartDetail.sanPham.giaBan}"></td>
+								<td class="align-middle" th:id="${cartDetail.maGioHang}+'_'+giaBan" th:text="${cartDetail.sanPham.giaBan}"></td>
 								<td class="align-middle">
 									<div class="input-group quantity mx-auto" style="width: 100px;">
 										<div class="input-group-btn">
@@ -64,8 +93,7 @@
 											</button>
 										</div>
 										<input type="text" class="form-control form-control-sm bg-secondary text-center"
-											th:id="${cartDetail.maGioHang}+'_'+soLuong" th:value="${cartDetail.soLuong}"
-											min="1" disabled>
+											th:id="${cartDetail.maGioHang}+'_'+soLuong" th:value="${cartDetail.soLuong}" min="1" disabled>
 										<div class="input-group-btn">
 											<button class="btn btn-sm btn-primary btn-plus"
 												th:onclick="'updateCartPlus('+${cartDetail.maGioHang}+')'">
@@ -77,9 +105,8 @@
 								<td class="align-middle" th:id="${cartDetail.maGioHang}+'_'+tongTien"
 									th:text="${cartDetail.sanPham.giaBan * cartDetail.soLuong}+'VND'"></td>
 								<td class="align-middle"><button class="btn btn-sm btn-primary"
-										th:onclick="'removeCart('+${cartDetail.maGioHang}+')'"><i
-											class="fa fa-times"></i></button></td>
-							</tr>
+										th:onclick="'removeCart('+${cartDetail.maGioHang}+')'"><i class="fa fa-times"></i></button></td>
+							</tr> -->
 						</tbody>
 					</table>
 				</div>
@@ -87,12 +114,19 @@
 					<div class="card-footer border-secondary bg-transparent">
 						<div class="d-flex justify-content-between mt-2">
 							<h5 class="font-weight-bold">Tổng:&nbsp;</h5>
-							<h5 class="font-weight-bold" id="tienBanh" th:text="${tienBanh}+'VND'"></h5>
+							<h5 class="font-weight-bold" id="tienBanh">
+								{{total | number}}VND
+							</h5>
 						</div>
 						<button id="myBtn" class="btn btn-block btn-primary my-3 py-3"><b>Check Out</b></button>
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="container-fluid pt-5" ng-show="db.products.length == 0">
+			<div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+			<h2>Giỏ Hàng trống ༼ ༎ຶ ᆺ ༎ຶ༽</h2></div>
 		</div>
 		<!-- Cart End -->
 		<div id="myModal" class="modal">
@@ -106,23 +140,23 @@
 								<div class="row">
 									<div class="col-md-12 form-group">
 										<label>Username</label>
-										<p th:text="${user.taiKhoan}"></p>
+										<p>{{db.user.taiKhoan}}</p>
 									</div>
 									<div class="col-md-12 form-group">
 										<label>Họ và Tên</label>
-										<p th:text="${user.hoTen}"></p>
+										<p>{{db.user.hoTen}}</p>
 									</div>
 									<div class="col-md-6 form-group">
 										<label>Email</label>
-										<p th:text="${user.email}"></p>
+										<p>{{db.user.email}}</p>
 									</div>
 									<div class="col-md-6 form-group">
 										<label>Số điện thoại</label>
-										<p th:text="${user.sdt}"></p>
+										<p>{{db.user.sdt}}</p>
 									</div>
 									<div class="col-md-12 form-group">
 										<label>Địa chỉ</label>
-										<p th:text="${user.diaChi}"></p>
+										<p>{{db.user.hoTen}}</p>
 									</div>
 								</div>
 								<form action="">
@@ -134,7 +168,7 @@
 										</div>
 										<div class="col-md-6 form-group">
 											<button
-												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Đặt
+												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" th:formaction="@{/user/cart/purchase}">Đặt
 												hàng</button>
 										</div>
 									</div>
@@ -148,25 +182,21 @@
 								</div>
 								<div class="card-body">
 									<h5 class="font-weight-medium mb-3"><b>Sản Phẩm</b></h5>
-									<div th:each="cartDetail : ${user.gioHangChiTiets}"
-										class="d-flex justify-content-between"
-										th:id="'checkout_'+${cartDetail.maGioHang}">
-										<p th:text="${cartDetail.sanPham.tenSP}"></p>
-										<p th:id="${cartDetail.maGioHang}+'_checkout_soLuong'"
-											th:text="${cartDetail.soLuong}"></p>
-										<p th:id="${cartDetail.maGioHang}+'_checkout_tongTien'"
-											th:text="${cartDetail.sanPham.giaBan*cartDetail.soLuong}+' VNĐ'"></p>
+									<div ng-repeat="item in db.products" class="d-flex justify-content-between">
+										<p>{{item.sanPham.tenSP}}</p>
+										<p>{{item.soLuong}}</p>
+										<p>{{item.sanPham.giaBan * item.soLuong | number}}VND</p>
 									</div>
 								</div>
 								<div class="card-footer border-secondary bg-transparent">
 									<div class="d-flex justify-content-between mt-2">
 										<h5 class="font-weight-bold">Tổng:</h5>
-										<h5 class="font-weight-bold" id="tienBanh_checkout" th:text="${tienBanh}+'VND'">
+										<h5 class="font-weight-bold" id="tienBanh_checkout">{{total | number}}VND
 										</h5>
 									</div>
 								</div>
 							</div>
-							<div class="card border-secondary mb-5">
+							<!-- <div class="card border-secondary mb-5">
 								<div class="card-header bg-secondary border-0">
 									<h5 class="font-weight-semi-bold m-0">Phương thức thanh toán</h5>
 								</div>
@@ -180,12 +210,6 @@
 									</div>
 									<div class="form-group">
 										<div class="custom-control custom-radio">
-											<input type="radio" class="custom-control-input" name="payment" id="paypal">
-											<label class="custom-control-label" for="paypal">Paypal</label>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="custom-control custom-radio">
 											<input type="radio" class="custom-control-input" name="payment"
 												id="directcheck">
 											<label class="custom-control-label" for="directcheck">Thanh Toán Trực
@@ -193,39 +217,13 @@
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<script>
-			// Get the modal
-			var modal = document.getElementById("myModal");
-
-			// Get the button that opens the modal
-			var btn = document.getElementById("myBtn");
-
-			// Get the <span> element that closes the modal
-			var span = document.getElementsByClassName("close")[0];
-
-			// When the user clicks the button, open the modal 
-			btn.onclick = function () {
-				modal.style.display = "block";
-			}
-
-			// When the user clicks on <span> (x), close the modal
-			span.onclick = function () {
-				modal.style.display = "none";
-			}
-
-			// When the user clicks anywhere outside of the modal, close it
-			window.onclick = function (event) {
-				if (event.target == modal) {
-					modal.style.display = "none";
-				}
-			}
-		</script>
+		<script th:src="@{/js/cart.js}"></script>
 	</div>
 </body>
 

@@ -1,6 +1,7 @@
 package com.poly.asm_nhom_6.controller;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -199,7 +200,7 @@ public class HomeController {
 		} else {
 			response.put("message", "0");
 			if (gioHangChiTiet == null) {
-				gioHangChiTietDAO.save(new GioHangChiTiet(soLuongSanPham, nguoiDung, sanPham));
+				gioHangChiTietDAO.save(new GioHangChiTiet(maND, soLuongSanPham, new Date(), nguoiDung, sanPham));
 			} else {
 				if (gioHangChiTiet.getSoLuong() + soLuongSanPham > sanPham.getSoLuong()) {
 					response.put("message",
@@ -416,20 +417,37 @@ public class HomeController {
 			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
 					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
 			cthdDAO.save(cthd);
+			SanPham sp = sanPhamDAO.findById(ghct.getSanPham().getMaSP()).get();
+			sp.setSoLuong(sp.getSoLuong() - ghct.getSoLuong());
+			sanPhamDAO.save(sp);
+			gioHangChiTietDAO.delete(ghct);
 		}
 		HoaDon recent = hoaDonDAO.getRecentReceipt(user.getMaND());
-		System.out.println(recent.getMaHoaDon());
 		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
 	}
 
 	@RequestMapping("/user/invoice/{id}")
 	public String invoiceDetail(@PathVariable("id") Integer id, Model model) {
+		header(model);
 		HoaDon hd = hoaDonDAO.findById(id).get();
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
 		user = nguoiDungDAO.findById(user.getMaND()).get();
 		model.addAttribute("user", user);
 		model.addAttribute("hd", hd);
-		return "/user/invoice";
+		return "/user/invoiceDetail";
+	}
+
+	@RequestMapping("/user/invoice")
+	public String invoice(Model model, @RequestParam("p") Optional<Integer> p) {
+		header(model);
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		Pageable pageable = PageRequest.of(p.orElse(0), 4);
+		Page<HoaDon> hds = hoaDonDAO.findHoaDonByMaND(user.getMaND(), pageable);
+		var numberOfPages = hds.getTotalPages();
+		model.addAttribute("invoice", hds);
+		model.addAttribute("currIndex", p.orElse(0));
+		model.addAttribute("numberOfPages", numberOfPages);
+		return "/user/invoiceList";
 	}
 
 	// @ResponseBody
