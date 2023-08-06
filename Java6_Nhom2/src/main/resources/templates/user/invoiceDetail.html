@@ -102,7 +102,7 @@
                                                 <th scope="row" colspan="5" class="border-0 text-end">Tổng hóa đơn:</th>
                                                 <td class="border-0 text-end">
                                                     <h4 class="m-0 fw-semibold"
-                                                        th:text="${#aggregates.sum(hd.chiTietHoaDons.![soLuong * sanPham.giaBan])}+'VND'">
+                                                        th:text="${#aggregates.sum(hd.chiTietHoaDons.![soLuong * giaBan])}+'VND'">
                                                     </h4>
                                                 </td>
                                             </tr>
