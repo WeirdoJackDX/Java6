@@ -18,6 +18,7 @@
                 <form class="form-horizontal" id="myForm" th:object="${nguoiDung2}" th:action="@{/user/signup/check}"
                     method="POST">
                     <!-- Form Name -->
+
                     <!-- Text input-->
                     <div class=" form-group col-lg-5" style="margin: auto;">
                         <!-- <span class="text-primary font-weight-bold border px-1100 mr-1"></span> -->
@@ -36,15 +37,13 @@
                             required="" type="email">
                         <span class="help-block"> </span>
 
-                        <label class="control-label" for="textinput">Giới tính</label>
-                        <input th:field="*{gioiTinh}" th:value="true" required="" type="radio">Nam
-                        <input th:field="*{gioiTinh}" th:value="false" required="" type="radio">Nữ
-                        <br>
-                        <span class="help-block"> </span>
                         <label class="control-label" for="textinput">Tài khoản</label>
                         <input id="textinput" th:field="*{taiKhoan}" placeholder="Tài khoản..."
                             class="form-control input-md" required="" type="text">
                         <span class="help-block"> </span>
+
+
+
                         <label class="control-label" for="textinput">Mật khẩu</label>
                         <input id="inputMK1" name="matKhau3" th:value="${param.matKhau3}" placeholder="Mật khẩu..."
                             class="form-control input-md" required="" type="password">

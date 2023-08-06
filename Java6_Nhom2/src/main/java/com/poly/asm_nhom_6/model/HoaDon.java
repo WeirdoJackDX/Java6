@@ -44,8 +44,8 @@ public class HoaDon implements Serializable {
 	@Column(name = "tien_giam")
 	Integer tienGiam;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
 	@Column(name = "ngay_tao")
 	Date ngayTao = new Date();
 

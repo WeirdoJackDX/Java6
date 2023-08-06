@@ -22,16 +22,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung"); // lấy từ session
         try {
             if (user == null) {
-                if (uri.startsWith("/user/home/index")
-                        || uri.startsWith("/user/contact") || uri.startsWith("/user/search")
-                        || uri.startsWith("/user/detail") || uri.startsWith("/user/signup")) {
-                    return true;
+                if (uri.startsWith("/user/cart") || uri.startsWith("/user/like")) {
+                    return false;
                 }
                 if (uri.startsWith("/admin") || uri.startsWith("/staff")) {
                     response.sendRedirect("/error404");
                     return false;
                 }
-                response.sendRedirect("/user/home/index");
                 return false;
             } else if (uri.contains("admin") || uri.contains("staff")) {
                 response.sendRedirect("/error404");
@@ -43,4 +40,5 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
 }

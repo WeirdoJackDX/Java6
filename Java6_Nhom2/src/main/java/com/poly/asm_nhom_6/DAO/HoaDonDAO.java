@@ -24,9 +24,4 @@ public interface HoaDonDAO extends JpaRepository<HoaDon, Integer> {
 	@Query("SELECT new Report(p.maHoaDon, p.nguoiDung.maND, p.ngayTao)" + " FROM HoaDon p"
 			+ " GROUP BY p.maHoaDon, p.nguoiDung.maND,p.ngayTao ORDER BY p.ngayTao DESC LIMIT 5")
 	List<Report> getListSP();
-	@Query("SELECT p FROM HoaDon p WHERE p.nguoiDung.maND = ?1 ORDER BY p.maHoaDon DESC")
-	Page<HoaDon> findHoaDonByMaND(Integer maND, Pageable pageable);
-
-	@Query("SELECT p FROM HoaDon p WHERE p.nguoiDung.maND LIKE ?1 ORDER BY p.maHoaDon DESC LIMIT 1")
-	HoaDon getRecentReceipt(Integer id);
 }
