@@ -70,6 +70,9 @@ public class SanPham implements Serializable {
     @Column(name = "gia_nhap")
     Integer giaNhap;
 
+    @Column(name = "availability")
+    Boolean isAvailable;
+
     @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference

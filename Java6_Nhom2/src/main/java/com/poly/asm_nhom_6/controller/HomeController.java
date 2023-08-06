@@ -306,7 +306,6 @@ public class HomeController {
 	@GetMapping("/user/home/index")
 	public String index(Model model) {
 		header(model);
-
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 
 		List<ReportLike> items = thichSanPhamDAO.getAllSanPhamAndLike(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
@@ -432,9 +431,13 @@ public class HomeController {
 		HoaDon hd = hoaDonDAO.findById(id).get();
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
 		user = nguoiDungDAO.findById(user.getMaND()).get();
-		model.addAttribute("user", user);
-		model.addAttribute("hd", hd);
-		return "/user/invoiceDetail";
+		if (hd.getNguoiDung().getMaND().equals(user.getMaND()) || user.getVaiTro() == 1) {
+			model.addAttribute("user", user);
+			model.addAttribute("hd", hd);
+			return "/user/invoiceDetail";
+		} else {
+			return "redirect:/error404";
+		}
 	}
 
 	@RequestMapping("/user/invoice")
