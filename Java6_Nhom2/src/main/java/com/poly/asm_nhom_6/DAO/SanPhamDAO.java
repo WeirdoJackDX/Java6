@@ -12,6 +12,10 @@ import com.poly.asm_nhom_6.model.ReportSP;
 import com.poly.asm_nhom_6.model.SanPham;
 
 public interface SanPhamDAO extends JpaRepository<SanPham, Integer> {
+	
+	
+	
+	
 	@Query("select o from SanPham o where o.maSP like ?1")
 	List<SanPham> findbykeywords(String keywords);
 
@@ -26,5 +30,9 @@ public interface SanPhamDAO extends JpaRepository<SanPham, Integer> {
 			"FROM SanPham p ORDER BY RAND() LIMIT ?1")
 	List<ReportLike> getAllSanPhamAndLike(Integer radom);
 
+	
+	
 	SanPham findByMaSPLike(Integer maSP);
+	
+	
 }
