@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{user/index.html}">
+
+<head>
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div>
+            <div style="margin: auto;">
+                <form class="form-horizontal" id="myForm" th:object="${user}" th:action="@{/user/info/check}"
+                    method="POST">
+                    <!-- Form Name -->
+
+                    <!-- Text input-->
+                    <div class=" form-group col-lg-5" style="margin: auto;">
+                        <!-- <span class="text-primary font-weight-bold border px-1100 mr-1"></span> -->
+                        <h1 class="m-0 display-5 font-weight-semi-bold"><span
+                                class="text-primary font-weight-bold mr-1">Thông tin khách hàng</span></h1>
+                        <!-- <h1></h1> -->
+                        <hr>
+                        <p>
+                            <label class="control-label" for="textinput">Họ và tên</label>
+                            <input id="textinput" th:field="*{hoTen}" placeholder="FullName...."
+                                class="form-control input-md" required="" type="text">
+                        </p>
+                        <p>
+                            <label class="control-label" for="textinput">Email</label>
+                            <input id="textinput" th:field="*{email}" placeholder="Email...."
+                                class="form-control input-md" required="" type="email">
+                        </p>
+                        <p>
+                            <label class="control-label" for="textinput">Số điện thoại</label>
+                            <input id="textinput" th:field="*{sdt}" placeholder="Số điện thoại...."
+                                class="form-control input-md" required="" type="text">
+                        </p>
+                        <p>
+                            <label class="control-label" for="textinput">Địa chỉ</label>
+                            <input id="textinput" th:field="*{diaChi}" placeholder="Địa chỉ...."
+                                class="form-control input-md" required="" type="text">
+                        </p>
+                        <p>
+                            <label class="control-label" for="textinput">Giới tính</label>
+                            <br>
+                            <input th:field="*{gioiTinh}" th:value="true" required="" type="radio">Nam
+                            <br>
+                            <input th:field="*{gioiTinh}" th:value="false" required="" type="radio">Nữ
+                        </p>
+                        <!-- <span class="help-block" style="color: red; font-size: small;" id="thongBaoLoi"
+                            th:text="${message}"></span> -->
+
+                        <br>
+
+                        <button id="singlebutton" class="btn btn-primary">Thay đổi</button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,11 +35,11 @@ import lombok.Setter;
 @Table(name = "Gio_Hang_Chi_Tiet")
 public class GioHangChiTiet implements Serializable {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_gio_hang")
     public Integer maGioHang;
@@ -60,12 +62,4 @@ public class GioHangChiTiet implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ma_sp")
     SanPham sanPham;
-
-    public GioHangChiTiet(Integer soLuong, NguoiDung nguoiDung, SanPham sanPham) {
-        this.soLuong = soLuong;
-        this.ngayThem = new Date();
-        this.nguoiDung = nguoiDung;
-        this.sanPham = sanPham;
-    }
-
 }

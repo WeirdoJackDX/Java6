@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -72,22 +73,30 @@ public class SanPham implements Serializable {
     @Column(name = "gia_nhap")
     Integer giaNhap;
 
+    @Column(name = "availability")
+    Boolean isAvailable;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference
     List<GioHangChiTiet> gioHangChiTiets;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference
     List<DanhGia> danhGias;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference
     List<ChiTietHoaDon> chiTietHoaDons;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference
     List<ThichSanPham> thichSanPhams;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sanPham")
     @JsonBackReference
     List<NhapKho> nhapKhos;

@@ -9,7 +9,7 @@ function dangXuat() {
 				window.location.href = response.redirectUrl
 
 			} else {
-				location.reload();
+				window.location = response.redirectUrl
 			}
 		},
 		error: function(xhr, status, error) {

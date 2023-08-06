@@ -1,5 +1,7 @@
 package com.poly.asm_nhom_6.controller;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,17 +15,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.poly.asm_nhom_6.DAO.ChiTietHoaDonDAO;
 import com.poly.asm_nhom_6.DAO.GioHangChiTietDAO;
+import com.poly.asm_nhom_6.DAO.HoaDonDAO;
 import com.poly.asm_nhom_6.DAO.LoaiBanhDAO;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.DAO.SanPhamDAO;
 import com.poly.asm_nhom_6.DAO.ThichSanPhamDAO;
+import com.poly.asm_nhom_6.model.ChiTietHoaDon;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
+import com.poly.asm_nhom_6.model.HoaDon;
 import com.poly.asm_nhom_6.model.NguoiDung;
 import com.poly.asm_nhom_6.model.ReportLike;
 import com.poly.asm_nhom_6.model.SanPham;
@@ -61,6 +68,12 @@ public class HomeController {
 
 	@Autowired
 	MailerServiceImpl mailer;
+
+	@Autowired
+	HoaDonDAO hoaDonDAO;
+
+	@Autowired
+	ChiTietHoaDonDAO cthdDAO;
 
 	public void demo(String email, String subject, String body) {
 		mailer.queue(email, subject, body);
@@ -132,7 +145,6 @@ public class HomeController {
 				} else {
 					demo(nguoiDung.getEmail(), "", "");
 					nguoiDung.setVaiTro(0);
-					nguoiDung.setGioiTinh(dangKy);
 					nguoiDungDAO.save(nguoiDung);
 					this.dangKy = true;
 					return "redirect:/user/home/index";
@@ -188,7 +200,7 @@ public class HomeController {
 		} else {
 			response.put("message", "0");
 			if (gioHangChiTiet == null) {
-				gioHangChiTietDAO.save(new GioHangChiTiet(soLuongSanPham, nguoiDung, sanPham));
+				gioHangChiTietDAO.save(new GioHangChiTiet(maND, soLuongSanPham, new Date(), nguoiDung, sanPham));
 			} else {
 				if (gioHangChiTiet.getSoLuong() + soLuongSanPham > sanPham.getSoLuong()) {
 					response.put("message",
@@ -294,7 +306,6 @@ public class HomeController {
 	@GetMapping("/user/home/index")
 	public String index(Model model) {
 		header(model);
-
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 
 		List<ReportLike> items = thichSanPhamDAO.getAllSanPhamAndLike(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
@@ -303,7 +314,7 @@ public class HomeController {
 		return "/user/index";
 	}
 
-	@GetMapping("/user/error404")
+	@GetMapping("/error404")
 	public String error(Model model) {
 		header(model);
 		return "user/pageNotFound";
@@ -335,7 +346,29 @@ public class HomeController {
 	@RequestMapping("/user/signup/form")
 	public String signup(Model model, @ModelAttribute("nguoiDung2") NguoiDung nguoiDung) {
 		header(model);
+		nguoiDung.setGioiTinh(true);
 		return "user/signup";
+	}
+
+	@RequestMapping("/user/info")
+	public String changeInfo(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
+		header(model);
+		nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
+		NguoiDung user = nguoiDungDAO.findById(nguoiDung.getMaND()).get();
+		model.addAttribute("user", user);
+		return "user/changeInfo";
+	}
+
+	@PostMapping("/user/info/check")
+	public String infoCheck(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user.setHoTen(nguoiDung.getHoTen());
+		user.setEmail(nguoiDung.getEmail());
+		user.setDiaChi(nguoiDung.getDiaChi());
+		user.setSdt(nguoiDung.getSdt());
+		user.setGioiTinh(nguoiDung.getGioiTinh());
+		nguoiDungDAO.save(user);
+		return "redirect:/user/home/index";
 	}
 
 	@ResponseBody
@@ -370,6 +403,54 @@ public class HomeController {
 	public String contact(Model model) {
 		header(model);
 		return "user/contact";
+	}
+
+	@RequestMapping("/user/cart/purchase")
+	public String invoice() {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user = nguoiDungDAO.findById(user.getMaND()).get();
+		HoaDon hd = new HoaDon(null, null, timestamp, null, user, null);
+		hoaDonDAO.save(hd);
+		for (GioHangChiTiet ghct : user.getGioHangChiTiets()) {
+			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
+					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
+			cthdDAO.save(cthd);
+			SanPham sp = sanPhamDAO.findById(ghct.getSanPham().getMaSP()).get();
+			sp.setSoLuong(sp.getSoLuong() - ghct.getSoLuong());
+			sanPhamDAO.save(sp);
+			gioHangChiTietDAO.delete(ghct);
+		}
+		HoaDon recent = hoaDonDAO.getRecentReceipt(user.getMaND());
+		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
+	}
+
+	@RequestMapping("/user/invoice/{id}")
+	public String invoiceDetail(@PathVariable("id") Integer id, Model model) {
+		header(model);
+		HoaDon hd = hoaDonDAO.findById(id).get();
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		user = nguoiDungDAO.findById(user.getMaND()).get();
+		if (hd.getNguoiDung().getMaND().equals(user.getMaND()) || user.getVaiTro() == 1) {
+			model.addAttribute("user", user);
+			model.addAttribute("hd", hd);
+			return "/user/invoiceDetail";
+		} else {
+			return "redirect:/error404";
+		}
+	}
+
+	@RequestMapping("/user/invoice")
+	public String invoice(Model model, @RequestParam("p") Optional<Integer> p) {
+		header(model);
+		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
+		Pageable pageable = PageRequest.of(p.orElse(0), 4);
+		Page<HoaDon> hds = hoaDonDAO.findHoaDonByMaND(user.getMaND(), pageable);
+		var numberOfPages = hds.getTotalPages();
+		model.addAttribute("invoice", hds);
+		model.addAttribute("currIndex", p.orElse(0));
+		model.addAttribute("numberOfPages", numberOfPages);
+		return "/user/invoiceList";
 	}
 
 	// @ResponseBody
