@@ -156,6 +156,13 @@ public class HomeController {
 
 	public void header(Model model) {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
+		if (nguoiDung != null && nguoiDung.getVaiTro() == 1) {
+			model.addAttribute("test", 0);
+			model.addAttribute("nguoiDung", new NguoiDung());
+			dangNhap = false;
+			nguoiDung = new NguoiDung();
+		}
+
 		if (dangXuat) {
 			model.addAttribute("dangXuat", dangXuat);
 			dangXuat = false;
@@ -307,9 +314,9 @@ public class HomeController {
 	public String index(Model model) {
 		header(model);
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-
 		List<ReportLike> items = thichSanPhamDAO.getAllSanPhamAndLike(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
 				12);
+		header(model);
 		model.addAttribute("items", items);
 		return "/user/index";
 	}
@@ -333,12 +340,16 @@ public class HomeController {
 			session.setAttribute("nguoiDung", nguoiDung);
 			response.put("success", true);
 			dangNhap = true;
-			// response.put("redirectUrl", "/user/home/index"); // URL chuyển hướng về trang
+			if (nguoiDung.getVaiTro() == 0) {
+				response.put("redirectUrl", "/user/home/index");
+			} else {
+				response.put("redirectUrl", "/trangchu/index");
+			}
+			// URL chuyển hướng về trang
 			// home
 		} else {
 			// Đăng nhập thất bại
 			response.put("success", false);
-			// response.put("message", "Tài khoản hoặc mật khẩu không chính xác");
 		}
 		return response;
 	}

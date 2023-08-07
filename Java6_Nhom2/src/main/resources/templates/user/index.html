@@ -235,7 +235,7 @@
 					},
 					success: function (response) {
 						if (response.success) {
-							location.reload();
+							window.location.href = response.redirectUrl;
 						} else {
 							var alertElement = document.getElementById('alertLogin');
 
