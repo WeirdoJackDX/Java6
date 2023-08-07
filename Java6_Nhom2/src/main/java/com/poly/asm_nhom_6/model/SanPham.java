@@ -71,7 +71,7 @@ public class SanPham implements Serializable {
     Integer giaNhap;
 
     @Column(name = "availability")
-    Boolean isAvailable;
+    Boolean isAvailable = false;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sanPham")

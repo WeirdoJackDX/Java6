@@ -41,85 +41,30 @@
 		<div class="content">
 			<div class="animated fadeIn">
 				<div class="row">
-					<div class="col-lg-12">
+					<div class="col-lg-6">
 						<div class="card">
 							<div class="card-header">
-								<strong class="card-title">Sản phẩm</strong>
-								<a th:href="@{/trangchu/sanpham/add}" class="fa fa-plus"> Thêm sản phẩm</a>
-								<nav aria-label="Page navigation example">
-									<div>
-										<ul class="pagination">
-											<li class="page-item"><a class="page-link"
-													th:href="@{/trangchu/sanpham/page/1}">First</a></li>
-
-											<li class="${current == 1}? 'page-item disabled' : 'page-item'">
-												<a class="page-link" aria-label="Previous"
-													th:href="@{|${baseUrl}${current - 1}|}">
-													<span aria-hidden="true">&laquo;</span>
-													<span class="sr-only">Previous</span>
-												</a>
-											</li>
-
-											<li th:each=" item : ${#numbers.sequence(begin,end)}"
-												th:class="${item == current ? 'page-item active':'page-item'}">
-												<a class="page-link" th:href="@{|${baseUrl}${item}|}">
-													<span th:text='${item}'>1</span>
-												</a>
-											</li>
-
-											<li class="${current == 1}? 'page-item disabled' : 'page-item'">
-												<a class="page-link" aria-label="Previous"
-													th:href="@{|${baseUrl}${current + 1}|}">
-													<span aria-hidden="true">&raquo;</span>
-													<span class="sr-only">Next</span>
-												</a>
-											</li>
-
-											<li th:class="${current == total}? 'page-item disabled' : 'page-item'">
-												<a class="page-link" th:href="@{|${baseUrl}${total}|}">Last</a>
-											</li>
-										</ul>
-
-									</div>
-
-								</nav>
-
+								<strong class="card-title">Danh mục loại bánh</strong>
 							</div>
-
 							<div class="table-stats order-table ov-h">
 								<table class="table ">
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>Loại bánh</th>
-											<th>Ảnh</th>
-											<th>tên</th>
-											<th>Số lượng</th>
-											<th>Note</th>
-											<th>Giá nhập</th>
-											<th>Giá bán</th>
-											<th>Chỉnh sửa</th>
-											<th>Trạng thái</th>
+											<th>Tên</th>
+											<th>Mô tả</th>
+											<th>Edit</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="sp : ${sanpham.pageList}">
-											<td th:text="${sp.maSP}"></td>
-											<td th:text="${sp.loaiBanh.tenLoaiBanh}"></td>
-											<td><img th:src="@{/img/__${sp.anh}__}" width="60px"></td>
-											<td th:text="${sp.tenSP}"></td>
-											<td th:text="${sp.soLuong}"></td>
-											<td th:text="${sp.ghiChu}"></td>
-											<td th:text="${sp.giaNhap}"></td>
-											<td th:text="${sp.giaBan}"></td>
+										<tr th:each="loaisp : ${loaibanh}">
+											<td th:text="${loaisp.maLoaiBanh}"></td>
+											<td th:text="${loaisp.tenLoaiBanh}"></td>
+											<td th:text="${loaisp.ghiChu}"></td>
 											<td>
-												<a th:href="@{/trangchu/sanpham/edit/__${sp.maSP}__}"
+												<a
+													th:href="@{/trangchu/loaisanpham/edit/__${loaisp.maLoaiBanh}__}"
 													class="fa fa-pencil"></a>
-											</td>
-											<td><a th:href="@{/trangchu/sanpham/an/__${sp.maSP}__}" class="fa fa-eye"
-													th:if="${sp.isAvailable} == true"></a>
-												<a th:href="@{/trangchu/sanpham/return/__${sp.maSP}__}"
-													class="fa fa-eye-slash" th:if="${sp.isAvailable} == false"></a>
 											</td>
 										</tr>
 								</table>
@@ -127,11 +72,52 @@
 						</div>
 					</div>
 
+					<div class="col-lg-6">
+						<div class="card">
+							<div class="card-header">
+								<strong>Chỉnh sửa thông tin</strong><p th:text="${message}" style="color: red;"></p>
+							</div>
+
+							<div class="card-body card-block">
+
+								<form method="post" th:object="${loai}">		
+									<div class="form-group" th:if="${loai.maLoaiBanh != null}"> <label for="nf-email" class=" form-control-label">Mã Loại</label>								
+										<input th:value="${loai.maLoaiBanh}"  type="text" id="maLoaiBanh" name="maLoaiBanh" class="form-control" readonly>
+									</div>
+												
+									<div class="form-group"> <label for="nf-email" class=" form-control-label">Tên</label>
+										<input th:value="${loai.tenLoaiBanh}"  type="text" id="tenLoaiBanh" placeholder="Tên.." name="tenLoaiBanh" class="form-control">
+									</div>
+
+									<div class="form-group"><label for="nf-password" class=" form-control-label">Mô tả</label>
+										<input th:value="${loai.ghiChu}" type="text" id="ghiChu" name="ghiChu" placeholder="Mô tả.." class="form-control">
+									</div>
+									
+									<button th:if="${loai.maLoaiBanh == null}" th:formaction="@{/trangchu/loaisanpham/add/submit}" 
+									type="submit" class="btn btn-primary btn-sm">
+										<i class="fa fa-dot-circle-o"></i> Thêm
+									</button>
+									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/edit/submit}">
+										<i class="fa fa-dot-circle-o"></i> Cập nhật
+									</button>
+									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/delete/__${loai.maLoaiBanh}__}"  >
+										<i class="fa fa-dot-circle-o"></i> Xóa
+									</button>
+									
+									<button class="btn btn-danger btn-sm" type="submit" th:formaction="@{/trangchu/loaisanpham/reset/submit}">
+										<i class="fa fa-ban"></i> Làm mới
+									</button>
+						
+								</form>
+								
+							</div>
+							
+							
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-
-
 	</div>
 
 	<!-- Right Panel -->

@@ -15,11 +15,11 @@ public interface ThichSanPhamDAO extends JpaRepository<ThichSanPham, Integer> {
         ThichSanPham findByMaNDAndMaSPLike(Integer maND, Integer maSP);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END))"
-                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 GROUP BY o ORDER BY RAND() LIMIT ?2")
+                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 AND o.isAvailable = TRUE GROUP BY o ORDER BY RAND() LIMIT ?2")
         List<ReportLike> getAllSanPhamAndLike(Integer maND, Integer soLuongNgauNhien);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END))"
-                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 AND o.loaiBanh.maLoaiBanh like ?2 GROUP BY o ORDER BY RAND() LIMIT ?3")
+                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 AND o.loaiBanh.maLoaiBanh like ?2 AND o.isAvailable = TRUE GROUP BY o ORDER BY RAND() LIMIT ?3")
         List<ReportLike> getAllSanPhamAndLikeTheoLoai(Integer maND, Integer maLoai, Integer soLuongNgauNhien);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END)) "
@@ -30,10 +30,10 @@ public interface ThichSanPhamDAO extends JpaRepository<ThichSanPham, Integer> {
         // ReportLike getAllSanPhamAndLikes_maSP(Integer maND, Integer maSP);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE  WHEN p.nguoiDung.maND = :maND THEN 1 ELSE 0 END))"
-                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.tenSP LIKE %:keyWord% AND o.soLuong <> 0 GROUP BY o")
+                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.tenSP LIKE %:keyWord% AND o.soLuong <> 0 AND o.isAvailable = TRUE GROUP BY o")
         Page<ReportLike> getAllSanPham(Integer maND, String keyWord, Pageable pageable);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END))"
-                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 GROUP BY o")
+                        + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.soLuong <> 0 AND o.isAvailable = TRUE GROUP BY o")
         Page<ReportLike> getAllSanPhamNe(Integer maND, Pageable pageable);
 }

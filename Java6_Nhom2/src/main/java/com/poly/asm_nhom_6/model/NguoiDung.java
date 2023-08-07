@@ -77,5 +77,4 @@ public class NguoiDung implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<GioHangChiTiet> gioHangChiTiets;
-
 }
