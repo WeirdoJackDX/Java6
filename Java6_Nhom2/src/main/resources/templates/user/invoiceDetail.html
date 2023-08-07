@@ -81,21 +81,25 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="hdct,integrator : ${hd.chiTietHoaDons}" th:object="${hdct}">
-                                                <th scope="row" th:text="${integrator.index + 1}">
-                                                </th>
-                                                <td>
-                                                    <img th:src="*{'/img/'+sanPham.anh}" class="img-fluid" alt=""
-                                                        style="width: 60px;">
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <h5 class="text-truncate font-size-14 mb-1"
-                                                            th:text="*{sanPham.tenSP}"></h5>
-                                                    </div>
-                                                </td>
-                                                <td th:text="*{sanPham.giaBan}+'VND'"></td>
-                                                <td th:text="*{soLuong}"></td>
-                                                <td class="text-end" th:text="*{sanPham.giaBan * soLuong}+'VND'"></td>
+                                                <a href="">
+                                                    <th scope="row" th:text="${integrator.index + 1}">
+                                                    </th>
+                                                    <td>
+                                                        <img th:src="*{'/img/'+sanPham.anh}" class="img-fluid" alt=""
+                                                            style="width: 40px; height: 40px;">
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a th:href="@{/user/detail/index?maSP=__${hdct.sanPham.maSP}__&maLoai=__${hdct.sanPham.loaiBanh.maLoaiBanh}__}">
+                                                                <h5 class="text-truncate font-size-14 mb-1"
+                                                                    th:text="*{sanPham.tenSP}"></h5>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td th:text="*{sanPham.giaBan}+'VND'"></td>
+                                                    <td th:text="*{soLuong}"></td>
+                                                    <td class="text-end" th:text="*{sanPham.giaBan * soLuong}+'VND'">
+                                                    </td>
                                             </tr>
 
                                             <tr>

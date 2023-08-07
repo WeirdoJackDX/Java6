@@ -90,15 +90,15 @@
 										</div>
 									</div>
 									<div class="row form-group">
-										<div class="col-8"> <label for="nf-email" class=" form-control-label">Ghi
+										<div class="col-6"> <label for="nf-email" class=" form-control-label">Ghi
 												chú</label>
-											<input th:value="${sp.ghiChu}" type="text" id="ghiChu" name="ghiChu"
-												class="form-control">
+											<textarea th:text="${sp.ghiChu}" id="ghiChu" name="ghiChu" rows="3"
+												class="form-control"></textarea>
 											<div class="alert alert-warning" th:if="${#fields.hasErrors('ghiChu')}"
 												th:errors="*{ghiChu}"></div>
 										</div>
 
-										<div class="col-4"> <label for="nf-email" class=" form-control-label">Số
+										<div class="col-6"> <label for="nf-email" class=" form-control-label">Số
 												lượng</label>
 											<input th:value="${sp.soLuong}" type="number" id="soLuong" name="soLuong"
 												class="form-control">

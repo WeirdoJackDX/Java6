@@ -126,7 +126,8 @@
 
 		<div class="container-fluid pt-5" ng-show="db.products.length == 0">
 			<div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
-			<h2>Giỏ Hàng trống ༼ ༎ຶ ᆺ ༎ຶ༽</h2></div>
+				<h2>Giỏ Hàng trống ༼ ༎ຶ ᆺ ༎ຶ༽</h2>
+			</div>
 		</div>
 		<!-- Cart End -->
 		<div id="myModal" class="modal">
@@ -159,20 +160,24 @@
 										<p>{{db.user.hoTen}}</p>
 									</div>
 								</div>
-								<form action="">
-									<div class="row">
-										<div class="col-md-6 form-group">
-											<button th:formaction="@{/user/info}"
-												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Thay
-												đổi thông tin?</button>
-										</div>
-										<div class="col-md-6 form-group">
-											<button
-												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" th:formaction="@{/user/cart/purchase}">Đặt
-												hàng</button>
-										</div>
+
+								<div class="row">
+									<div class="col-md-6 form-group">
+										<button th:formaction="@{/user/info}"
+											class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Thay
+											đổi thông tin?</button>
 									</div>
-								</form>
+
+									<div class="col-md-6 form-group">
+										<form method="post" th:action="@{/pay}">
+											<input type="number" name="price" value="{{total}}" hidden="true">
+											<button
+												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Đặt
+												hàng</button>
+										</form>
+									</div>
+								</div>
+
 							</div>
 						</div>
 						<div class="col-lg-4">
