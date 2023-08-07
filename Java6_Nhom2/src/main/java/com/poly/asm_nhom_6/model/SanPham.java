@@ -34,39 +34,38 @@ import lombok.Setter;
 public class SanPham implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	// @Autowired
+    // @Autowired
     // SanPhamDAO dao;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_sp")
     Integer maSP;
 
-    @NotBlank(message = "{Blank.tensanpham}")
+    @NotBlank(message = "Vui lòng nhập tên sản phẩm")
     @Column(name = "ten_sp")
     String tenSP;
 
-    @Positive(message = "{Blank.soluongsanpham}")
-    @NotNull(message = "Khong duoc de trong so luong")
+    @NotNull(message = "Vui lòng nhập số lượng")
+    @Positive(message = "Số lượng phải lớn hơn 0")
     @Column(name = "so_luong")
     Integer soLuong;// được hiểu là số lượng còn trong kho và kệ trưng bày
 
     String anh;
 
-    @NotBlank(message = "{Blank.ghichusanpham}")
     @Column(name = "ghi_chu")
     String ghiChu;
 
-    @Positive(message = "{Blank.giaban}")
-    @NotNull(message = "khong duoc de trong gia ban")
+    @NotNull(message = "Vui lòng nhập giá bán")
+    @Positive(message = "Giá bán phải lớn hơn 0")
     @Column(name = "gia_ban")
     Integer giaBan;
 
-    @Positive(message = "{Blank.gianhap}")
-    @NotNull(message = "Khong duoc de trong gia nhap")
+    @NotNull(message = "Vui lòng nhập giá nhập")
+    @Positive(message = "Giá nhập phải lớn hơn 0")
     @Column(name = "gia_nhap")
     Integer giaNhap;
 
