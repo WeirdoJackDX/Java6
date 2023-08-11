@@ -99,6 +99,5 @@ public class SanPham implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "ma_loai_banh")
-    @JsonBackReference
     public LoaiBanh loaiBanh;
 }

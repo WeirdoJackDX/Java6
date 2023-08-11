@@ -1,6 +1,5 @@
 package com.poly.asm_nhom_6.controller;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import com.poly.asm_nhom_6.DAO.LoaiBanhDAO;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.DAO.SanPhamDAO;
 import com.poly.asm_nhom_6.DAO.ThichSanPhamDAO;
-import com.poly.asm_nhom_6.model.ChiTietHoaDon;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
 import com.poly.asm_nhom_6.model.HoaDon;
 import com.poly.asm_nhom_6.model.NguoiDung;
@@ -55,6 +53,12 @@ public class HomeController {
 	SanPhamDAO sanPhamDAO;
 
 	@Autowired
+	HoaDonDAO hoaDonDAO;
+
+	@Autowired
+	GioHangChiTietDAO gioHangChiTietDAO;
+
+	@Autowired
 	LoaiBanhDAO loaiBanhDAO;
 
 	@Autowired
@@ -64,13 +68,7 @@ public class HomeController {
 	NguoiDungDAO nguoiDungDAO;
 
 	@Autowired
-	GioHangChiTietDAO gioHangChiTietDAO;
-
-	@Autowired
 	MailerServiceImpl mailer;
-
-	@Autowired
-	HoaDonDAO hoaDonDAO;
 
 	@Autowired
 	ChiTietHoaDonDAO cthdDAO;
@@ -403,26 +401,6 @@ public class HomeController {
 	public String contact(Model model) {
 		header(model);
 		return "user/contact";
-	}
-
-	@RequestMapping("/user/cart/purchase")
-	public String invoice() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
-		user = nguoiDungDAO.findById(user.getMaND()).get();
-		HoaDon hd = new HoaDon(null, null, timestamp, null, user, null);
-		hoaDonDAO.save(hd);
-		for (GioHangChiTiet ghct : user.getGioHangChiTiets()) {
-			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
-					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
-			cthdDAO.save(cthd);
-			SanPham sp = sanPhamDAO.findById(ghct.getSanPham().getMaSP()).get();
-			sp.setSoLuong(sp.getSoLuong() - ghct.getSoLuong());
-			sanPhamDAO.save(sp);
-			gioHangChiTietDAO.delete(ghct);
-		}
-		HoaDon recent = hoaDonDAO.getRecentReceipt(user.getMaND());
-		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
 	}
 
 	@RequestMapping("/user/invoice/{id}")

@@ -5,8 +5,6 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +17,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -50,7 +47,6 @@ public class GioHangChiTiet implements Serializable {
     Integer soLuong;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Past(message = "Không chọn trước ngày hiện tại")
     @Temporal(TemporalType.DATE)
     @Column(name = "ngay_them")
     Date ngayThem = new Date();

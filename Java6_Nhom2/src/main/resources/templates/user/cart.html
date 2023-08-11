@@ -36,6 +36,7 @@
 					<table class="table table-bordered text-center mb-0">
 						<thead class="bg-secondary text-dark">
 							<tr>
+								<th><input class="input-group" type="checkbox" ng-click="checkAll()" id="checkAll" ng-model="check"></th>
 								<th>Sản phẩm</th>
 								<th>Tên sản phẩm</th>
 								<th>Giá</th>
@@ -46,35 +47,42 @@
 						</thead>
 						<tbody class="align-middle">
 							<tr ng-repeat="item in db.products">
+								<td><input ng-show="item.gioHangChiTiet.sanPham.soLuong >= item.gioHangChiTiet.soLuong" class="input-group" type="checkbox" ng-model="item.isChecked"
+										ng-click="updateCheck(item.gioHangChiTiet.maGioHang)"></td>
 								<td class="align-left">
-									<img ng-src="/img/{{item.sanPham.anh}}" class="img-fluid" alt=""
+									<img th:src="@{/img/{{item.gioHangChiTiet.sanPham.anh}}}" class="img-fluid" alt=""
 										style="width: 60px;">
 								</td>
 								<td class="align-middle">
-									<b>{{item.sanPham.tenSP}}</b>
+									<a href="/user/detail/index?maSP={{item.gioHangChiTiet.sanPham.maSP}}&maLoai={{item.gioHangChiTiet.sanPham.loaiBanh.maLoaiBanh}}">
+										<b>{{item.gioHangChiTiet.sanPham.tenSP}}</b>
+									</a>
+									<p ng-show="item.gioHangChiTiet.sanPham.soLuong == 0"><b style="color: red;">Sản phẩm tạm hết trong kho</b></p>
+									<p ng-show="item.gioHangChiTiet.sanPham.soLuong < item.gioHangChiTiet.soLuong &&item.gioHangChiTiet.sanPham.soLuong>0"><b style="color: red;">Số lượng cung cấp không đủ vui lòng giảm</b></p>
 								</td>
-								<td class="align-middle">{{item.sanPham.giaBan | number}}VND</td>
+								<td class="align-middle">{{item.gioHangChiTiet.sanPham.giaBan | number}}VND</td>
 								<td class="align-middle">
 									<div class="input-group quantity mx-auto" style="width: 100px;">
 										<div class="input-group-btn">
 											<button class="btn btn-sm btn-primary btn-minus"
-												ng-click="update(item.maGioHang, item.soLuong, 0)">
+												ng-click="update(item.gioHangChiTiet.maGioHang, item.gioHangChiTiet.soLuong, 0)">
 												<i class="fa fa-minus"></i>
 											</button>
 										</div>
 										<input type="text" class="form-control form-control-sm bg-secondary text-center"
-											min="1" ng-value="{{item.soLuong}}" disabled>
+											min="1" value="{{item.gioHangChiTiet.soLuong}}" max="{{item.gioHangChiTiet.sanPham.soLuong}}" disabled>
 										<div class="input-group-btn">
 											<button class="btn btn-sm btn-primary btn-plus"
-												ng-click="update(item.maGioHang, item.soLuong, 1)">
+												ng-click="update(item.gioHangChiTiet.maGioHang, item.gioHangChiTiet.soLuong, 1)">
 												<i class="fa fa-plus"></i>
 											</button>
 										</div>
 									</div>
 								</td>
-								<td class="align-middle">{{item.sanPham.giaBan * item.soLuong | number}}VND</td>
+								<td class="align-middle">{{item.gioHangChiTiet.sanPham.giaBan *
+									item.gioHangChiTiet.soLuong | number}}VND</td>
 								<td class="align-middle"><button class="btn btn-sm btn-primary"
-										ng-click="delete(item.maGioHang)"><i class="fa fa-times"></i></button></td>
+										ng-click="delete(item.gioHangChiTiet.maGioHang)"><i class="fa fa-times"></i></button></td>
 							</tr>
 							<!-- <tr th:each="cartDetail : ${user.gioHangChiTiets}" th:id="'cart_'+${cartDetail.maGioHang}">
 								<td class="align-left">
@@ -118,7 +126,8 @@
 								{{total | number}}VND
 							</h5>
 						</div>
-						<button id="myBtn" class="btn btn-block btn-primary my-3 py-3"><b>Check Out</b></button>
+						<button ng-hide="total == 0" id="myBtn" class="btn btn-block btn-primary my-3 py-3"><b>Check
+								Out</b></button>
 					</div>
 				</div>
 			</div>
@@ -171,7 +180,7 @@
 									<div class="col-md-6 form-group">
 										<form method="post" th:action="@{/pay}">
 											<input type="number" name="price" value="{{total}}" hidden="true">
-											<button
+											<button ng-click="toPayMent()"
 												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Đặt
 												hàng</button>
 										</form>
@@ -187,10 +196,12 @@
 								</div>
 								<div class="card-body">
 									<h5 class="font-weight-medium mb-3"><b>Sản Phẩm</b></h5>
-									<div ng-repeat="item in db.products" class="d-flex justify-content-between">
-										<p>{{item.sanPham.tenSP}}</p>
-										<p>{{item.soLuong}}</p>
-										<p>{{item.sanPham.giaBan * item.soLuong | number}}VND</p>
+									<div ng-repeat="item in db.products" class="d-flex justify-content-between"
+										ng-show="item.isChecked == true">
+										<p>{{item.gioHangChiTiet.sanPham.tenSP}}</p>
+										<p>{{item.gioHangChiTiet.soLuong}}</p>
+										<p>{{item.gioHangChiTiet.sanPham.giaBan * item.gioHangChiTiet.soLuong |
+											number}}VND</p>
 									</div>
 								</div>
 								<div class="card-footer border-secondary bg-transparent">
