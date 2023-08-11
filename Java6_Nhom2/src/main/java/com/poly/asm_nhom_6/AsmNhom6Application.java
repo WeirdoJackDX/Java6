@@ -1,4 +1,4 @@
- package com.poly.asm_nhom_6;
+package com.poly.asm_nhom_6;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -236,10 +236,10 @@ public class AdminContrller {
 
 		}
 	}
-
+	
 	// Ẩn sản phẩm
-	@RequestMapping("/trangchu/sanpham/delete/{id}")
-	public String deleteSP(Model model, @PathVariable("id") Integer id) {
+	@RequestMapping("/trangchu/sanpham/an/{id}")
+	public String anSP(Model model, @PathVariable("id") Integer id) {
 		SanPham sanpham = sanphamdao.findById(id).get();
 		sanpham.setIsAvailable(false);
 		sanphamdao.save(sanpham);
@@ -253,6 +253,13 @@ public class AdminContrller {
 		sanpham.setIsAvailable(true);
 		sanphamdao.save(sanpham);
 		return "redirect:/trangchu/sanpham";
-
 	}
+	@RequestMapping("/trangchu/sanpham/delete/{id}")
+	public String delete(Model model, @PathVariable("id") Integer id) {
+		SanPham sanpham = sanphamdao.findById(id).get();
+		
+		sanphamdao.delete(sanpham);
+		return "redirect:/trangchu/sanpham";
+	}
+
 }
