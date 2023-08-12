@@ -158,7 +158,7 @@ public class HomeController {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 		if (nguoiDung != null && nguoiDung.getVaiTro() == 1) {
 			model.addAttribute("test", 0);
-			model.addAttribute("nguoiDung", new NguoiDung());
+			session.removeAttribute("nguoiDung");
 			dangNhap = false;
 			nguoiDung = new NguoiDung();
 		}
@@ -181,6 +181,7 @@ public class HomeController {
 		try {
 			if (nguoiDung != null) {
 				nguoiDung.getVaiTro();
+				nguoiDung.getMaND();
 				Long soLuongSanPham = gioHangChiTietDAO.countCartById(nguoiDung.getMaND());
 				model.addAttribute("test", soLuongSanPham);
 				model.addAttribute("nguoiDung", nguoiDung);
@@ -316,7 +317,6 @@ public class HomeController {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 		List<ReportLike> items = thichSanPhamDAO.getAllSanPhamAndLike(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
 				12);
-		header(model);
 		model.addAttribute("items", items);
 		return "/user/index";
 	}
