@@ -235,7 +235,11 @@
 					},
 					success: function (response) {
 						if (response.success) {
-							window.location.href = response.redirectUrl;
+							if (response.redirectUrl.includes('user')) {
+								location.reload();
+							} else {
+								window.location.href = response.redirectUrl;
+							}
 						} else {
 							var alertElement = document.getElementById('alertLogin');
 
