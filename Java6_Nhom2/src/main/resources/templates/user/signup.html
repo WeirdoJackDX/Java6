@@ -35,8 +35,9 @@
                         <input id="textinput" th:field="*{email}" placeholder="Email...." class="form-control input-md"
                             required="" type="email">
                         <span class="help-block"> </span>
+                        <br>
 
-                        <label class="control-label" for="textinput">Giới tính</label>
+                        <label class="control-label" for="textinput">Giới tính: </label>
                         <input th:field="*{gioiTinh}" th:value="true" required="" type="radio">Nam
                         <input th:field="*{gioiTinh}" th:value="false" required="" type="radio">Nữ
                         <br>
