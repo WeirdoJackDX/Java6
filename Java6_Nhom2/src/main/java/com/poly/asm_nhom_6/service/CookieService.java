@@ -3,9 +3,9 @@ package com.poly.asm_nhom_6.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class CookieService {
@@ -20,7 +20,7 @@ public class CookieService {
             for (Cookie cookie : cookies)
                 if (cookie.getName().equals(name))
                     return cookie;
-        return null;    
+        return null;
     }
 
     public String getValue(String name) {
@@ -32,11 +32,10 @@ public class CookieService {
 
     public Cookie add(String name, String value, int hours) {
         Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(hours * 3600); 
-        cookie.setPath("/"); 
-        
-        response.addCookie(cookie); 
-        
+        cookie.setMaxAge(hours * 3600);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
         return cookie;
     }
 

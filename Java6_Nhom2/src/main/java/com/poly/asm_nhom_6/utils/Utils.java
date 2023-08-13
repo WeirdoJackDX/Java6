@@ -1,6 +1,6 @@
 package com.poly.asm_nhom_6.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 public class Utils {
 	public static String getBaseURL(HttpServletRequest request) {

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.model.NguoiDung;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @Controller
 public class ClientController {

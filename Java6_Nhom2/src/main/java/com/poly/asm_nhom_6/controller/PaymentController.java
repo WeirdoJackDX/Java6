@@ -18,8 +18,8 @@ import com.poly.asm_nhom_6.model.NguoiDung;
 import com.poly.asm_nhom_6.service.PaypalService;
 import com.poly.asm_nhom_6.utils.Utils;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class PaymentController {

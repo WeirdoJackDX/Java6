@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.poly.asm_nhom_6.model.MailInfo;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class MailerServiceImpl implements MailerService {

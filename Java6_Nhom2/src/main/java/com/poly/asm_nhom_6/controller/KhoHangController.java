@@ -24,7 +24,7 @@ import com.poly.asm_nhom_6.model.SanPham;
 import com.poly.asm_nhom_6.service.OptionServiceNhaCungCap;
 import com.poly.asm_nhom_6.service.OptionServiceSanPham;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @Controller	
 public class KhoHangController {

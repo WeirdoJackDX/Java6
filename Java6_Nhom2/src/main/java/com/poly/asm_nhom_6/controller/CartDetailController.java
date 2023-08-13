@@ -26,7 +26,7 @@ import com.poly.asm_nhom_6.service.NguoiDungService;
 import com.poly.asm_nhom_6.service.OptionServiceSanPham;
 import com.poly.asm_nhom_6.service.SessionService;
 
-import jakarta.mail.internet.ParseException;
+import javax.mail.internet.ParseException;
 
 @Controller
 public class CartDetailController {

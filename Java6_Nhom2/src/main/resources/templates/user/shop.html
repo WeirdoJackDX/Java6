@@ -29,7 +29,7 @@
             <nav aria-label="Page navigation example" th:if="${page.totalPages > 1}">
                 <ul class="pagination text-center align-items-center justify-content-center">
                     <li class="page-item"><a type="button" class="page-link"
-                            th:href="@{/user/shop/page?p=__${page.number - 1}__}"
+                            th:href="@{|/user/shop/page?p=${page.number - 1}|}"
                             th:onclick="${page.number==0} ? 'return false;' : null"
                             th:style="${page.number==0} ? 'background-color: #eee' : ''">Previous</a>
                     </li>
@@ -37,13 +37,13 @@
 
                     <div th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
                         <li class="page-item"><a class="page-link btn btn-secondary"
-                                th:href="@{/user/shop/page?p=__${i}__}"
+                                th:href="@{|/user/shop/page?p=${i}|}"
                                 th:style="${'background-color:' + (i==page.number?'lightgrey':'white')}"
                                 th:text="${i + 1}"></a></li>
                     </div>
 
                     <li class="page-item"><a type="button" class="page-link"
-                            th:href="@{/user/shop/page?p=__${page.number + 1}__}"
+                            th:href="@{|/user/shop/page?p=${page.number + 1}|}"
                             th:onclick="${page.number==page.totalPages - 1} ? 'return false;' : null"
                             th:style="${page.number==page.totalPages - 1} ? 'background-color: #eee' : ''">Next</a>
                     </li>

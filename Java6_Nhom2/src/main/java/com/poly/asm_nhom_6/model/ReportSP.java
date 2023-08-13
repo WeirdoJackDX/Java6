@@ -2,7 +2,7 @@ package com.poly.asm_nhom_6.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Id;
+import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

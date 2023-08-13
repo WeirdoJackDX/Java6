@@ -2,7 +2,7 @@ package com.poly.asm_nhom_6.service;
 
 import com.poly.asm_nhom_6.model.MailInfo;
 
-import jakarta.mail.MessagingException;
+import javax.mail.MessagingException;
 
 public interface MailerService {
     /**

@@ -17,7 +17,7 @@ import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
 import com.poly.asm_nhom_6.model.NguoiDung;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 @CrossOrigin("*")
 @RestController

@@ -7,8 +7,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.poly.asm_nhom_6.model.NguoiDung;
 import com.poly.asm_nhom_6.service.SessionService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class SecurityInterceptorAdmin implements HandlerInterceptor {
