@@ -37,7 +37,7 @@ import com.poly.asm_nhom_6.model.SanPham;
 import com.poly.asm_nhom_6.model.ThichSanPham;
 import com.poly.asm_nhom_6.service.MailerServiceImpl;
 
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -463,18 +463,4 @@ public class HomeController {
 		model.addAttribute("numberOfPages", numberOfPages);
 		return "/user/invoiceList";
 	}
-
-	// @ResponseBody
-	// @PostMapping("/user/cart/item/update")
-	// public String index2(Model model) {
-	// return "user/index";
-	// }
-
-	// @ResponseBody
-	// @PostMapping("/user/cart/item/update")
-	// public Item updateCardItem(@RequestBody Item item) {
-	// // Process the data received via AJAX
-	// Item updatedItem = cart.update(item.getId(), item.getQty());
-	// return updatedItem;
-	// }
 }

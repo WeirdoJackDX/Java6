@@ -6,9 +6,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.poly.asm_nhom_6.model.NguoiDung;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Service
 public class AuthInterceptor implements HandlerInterceptor {
@@ -24,16 +24,17 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (user == null) {
                 if (uri.startsWith("/user/home/index")
                         || uri.startsWith("/user/contact") || uri.startsWith("/user/search")
-                        || uri.startsWith("/user/detail") || uri.startsWith("/user/signup")) {
+                        || uri.startsWith("/user/detail") || uri.startsWith("/user/signup")
+                        || uri.startsWith("/user/shop")) {
                     return true;
                 }
-                if (uri.startsWith("/admin") || uri.startsWith("/staff")) {
+                if (uri.startsWith("/trangchu")) {
                     response.sendRedirect("/error404");
                     return false;
                 }
                 response.sendRedirect("/user/home/index");
                 return false;
-            } else if (uri.contains("admin") || uri.contains("staff")) {
+            } else if (uri.contains("/trangchu") && user.getVaiTro() != 1) {// vai trò 1 là admin
                 response.sendRedirect("/error404");
                 return false;
             }
