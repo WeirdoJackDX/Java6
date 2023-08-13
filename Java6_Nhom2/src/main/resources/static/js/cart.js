@@ -67,21 +67,58 @@ app.controller('cart-ctrl', function ($scope, $http) {
 			$scope.check = false
 		} else {
 			$scope.db.products[index].isChecked = true
+			var boolean = true;
+			for (var i = 0; i < $scope.db.products.length; i++) {
+				if ($scope.db.products[i].isChecked === false) {
+					if ($scope.db.products[i].gioHangChiTiet.sanPham.soLuong < 0 || $scope.db.products[i].gioHangChiTiet.sanPham.soLuong >= $scope.db.products[i].gioHangChiTiet.soLuong) {
+						boolean = false;
+					}
+				}
+			}
+			if (boolean === true) {
+				$scope.check = true
+			}
 		}
 		$scope.total = $scope.getTotal($scope.db);
 		console.log($scope.db.products)
 	}
 
+	$scope.checkBox = function () {
+		if ($scope.check === true) {
+			$scope.checkAll()
+		} else {
+			$scope.uncheckAll()
+		}
+	}
+
 	$scope.checkAll = function () {
 		for (var i = 0; i < $scope.db.products.length; i++) {
-			$scope.check = true
 			if ($scope.db.products[i].gioHangChiTiet.sanPham.soLuong >= $scope.db.products[i].gioHangChiTiet.soLuong
 			) {
 				$scope.db.products[i].isChecked = true
 			}
 		}
+		$scope.check = true
 		$scope.total = $scope.getTotal($scope.db);
 		console.log($scope.db.products)
+	}
+
+	$scope.uncheckAll = function () {
+		var boolean = true;
+		for (var i = 0; i < $scope.db.products.length; i++) {
+			if ($scope.db.products[i].isChecked === false) {
+				if ($scope.db.products[i].gioHangChiTiet.sanPham.soLuong > $scope.db.products[i].gioHangChiTiet.soLuong && $scope.db.products[i].gioHangChiTiet.sanPham.soLuong > 0) {
+					boolean = false;
+				}
+			}
+		}
+		if (boolean === true) {
+			for (var i = 0; i < $scope.db.products.length; i++) {
+				$scope.db.products[i].isChecked = false;
+			}
+		}
+		$scope.check = false
+		$scope.total = $scope.getTotal($scope.db);
 	}
 
 	$scope.toPayMent = function () {
