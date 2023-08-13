@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +36,16 @@ public class SanPhamRestController {
     public SanPham getOne(@PathVariable("id") Integer id) {
         return sanPhamDAO.findById(id).get();
     }
+
     @PutMapping("/rest/sanpham/{id}")
     public SanPham update(@PathVariable("id") Integer id, @RequestBody SanPham sanpham) {
         return sanPhamDAO.save(sanpham);
+    }
+
+    @PostMapping("/rest/sanpham/save")
+    public SanPham save(@RequestBody SanPham sanPham) {
+        System.out.println(sanPham);
+        return sanPhamDAO.save(sanPham);
     }
 
 }

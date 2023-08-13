@@ -52,6 +52,7 @@
 						<div class="card">
 							<div class="card-header">
 								<strong class="card-title">Danh mục loại bánh</strong>
+								
 							</div>
 							<div class="table-stats order-table ov-h">
 								<table class="table ">
@@ -64,7 +65,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat=" item in db">
+										<tr ng-repeat=" item in pager.db">
 											<td>{{item.maLoaiBanh}}</td>
 											<td>{{item.tenLoaiBanh}}</td>
 											<td>{{item.ghiChu}}</td>
@@ -73,6 +74,34 @@
 											</td>
 										</tr>
 								</table>
+								<ul class="pagination">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" aria-label="Previous">
+                                              <button ng-click="pager.first()">First</button>
+                                             
+                                            </a>
+                                          </li>
+                                        <li class="page-item">
+                                          <a class="page-link" >
+                                            <button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
+                                          </a>
+                                        </li>
+
+                                        <li class="page-item"><a class="page-link">{{pager.page + 1}} of {{pager.count}}</a></li>
+                                        
+                                        <li class="page-item">
+                                          <a class="page-link">
+                                            <button aria-hidden="true" ng-click="pager.next()">&raquo;</button>                                         
+                                          </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link">
+                                              <button ng-click="pager.last()">Last</button>
+                                            </a>
+                                          </li>
+                                      </ul>
+                                      </ul>
 							</div> <!-- /.table-stats -->
 						</div>
 					</div>

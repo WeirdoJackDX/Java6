@@ -5,10 +5,41 @@ app.controller('loaiSp-ctrl', function ($scope, $http) {
     $scope.delete = false
     $scope.form = {}
     
+    $scope.initialize = function () {
     $http.get("/rest/loaiSp").then(response => {
         $scope.db = response.data;
         console.log($scope.db);
-    })
+    })}
+    $scope.initialize()
+    $scope.pager = {
+        page: 0,
+        size: 5,
+        get db() {
+            var start = this.page * this.size;
+            return $scope.db.slice(start, start + this.size);
+        },
+        get count(){
+            return Math.ceil(1.0 * $scope.db.length/this.size);
+        },
+        first(){
+            this.page = 0;
+        },
+        pre(){
+            this.page--;
+            if(this.page < 0){
+                this.last();
+            }
+        },
+        last(){
+            this.page = this.count -1;
+        },
+        next(){
+            this.page ++;
+            if(this.page>= this.count){
+                this.first();
+            }
+        }
+    }
     $scope.index_of = function (id) {
         return $scope.db.findIndex(a => a.maLoaiBanh == id);
     }

@@ -51,42 +51,74 @@
 							<div class="card-header">
 								<nav aria-label="Page navigation example">
 
-									<form class="form-horizontal">
-										<div class="row form-group">
-											<div class="col col-md-4"><input type="text" placeholder="Tên"
-													class="form-control" name="tenSP" ng-model="form.tenSP"></div>
-											<div class="col col-md-4"><input type="text" placeholder="Mã sản phẩm"
-													class="form-control" name="maSP" ng-model="form.maSP"></div>
+									<form class="row form-horizontal" name="frmSanPham">
+										<div class="col-sm-4 text-left">
+											<label for="image">
+												<img th:src="@{/img/{{form.anh}}}" style="width: 300px; height: 200px">
+											</label>
 										</div>
-										<div class="row form-group">
-											<div class="col col-md-4"><input type="number" placeholder="Giá bán"
-													class="form-control" name="giaBan" ng-model="form.giaBan"></div>
+										<div class="col-sm-8">
+											<div class="row form-group">
+												<div class="col col-md-6">
+													<input type="text" placeholder="Tên" class="form-control"
+														name="tenSP" ng-model="form.tenSP" required>
+													<!-- <div ng-hide="frmSanPham.tenSP.$valid" style="color:brown">Vui lòng
+														nhâp tên Sản Phẩm</div> -->
+												</div>
 
-											<div class="col col-md-4"><input type="number" placeholder="Giá nhập"
-													class="form-control" name="giaNhap" ng-model="form.giaNhap"></div>
-
-											<div class="col col-md-4"><input type="number" placeholder="Số lượng"
-													class="form-control" name="soLuong" ng-model="form.soLuong"></div>
-										</div>
-										<div class="row form-group">
-											<div class="col col-md-12"><textarea placeholder="Ghi chú"
-													class="form-control" name="ghiChu"
-													ng-model="form.ghiChu"></textarea></div>
-										</div>
-										<div class="row form-group">
-											<div class="col col-md-6">
-												<select name="disabledSelect" id="disabledSelect" class="form-control"
-													ng-model="form.loaiBanh.maLoaiBanh">
-													<option ng-repeat="option in db.loai" ng-value="option.maLoaiBanh">
-														{{option.tenLoaiBanh}}</option>
-												</select>
+												<div class="col col-md-6"><input type="text" placeholder="Mã sản phẩm"
+														class="form-control" name="maSP" ng-model="form.maSP" readonly>
+												</div>
 											</div>
-											<div class="col col-md-6"><input type="file" class="form-control" name="anh"
-													onchange="angular.element(this).scope().setFile(this)"></div>
-											{{theFile.name}}
+											<div class="row form-group">
+												<div class="col col-md-4"><input type="number" placeholder="Giá bán"
+														class="form-control" name="giaBan" ng-model="form.giaBan" min=1
+														required></div>
+
+												<div class="col col-md-4"><input type="number" placeholder="Giá nhập"
+														class="form-control" name="giaNhap" ng-model="form.giaNhap"
+														min=1 required>
+												</div>
+
+												<div class="col col-md-4"><input type="number" placeholder="Số lượng"
+														class="form-control" name="soLuong" ng-model="form.soLuong"
+														min=1 required>
+												</div>
+											</div>
+											<div class="row form-group">
+												<div class="col col-md-12"><textarea placeholder="Ghi chú"
+														class="form-control" name="ghiChu"
+														ng-model="form.ghiChu"></textarea></div>
+											</div>
+											<div class="row form-group">
+												<div class="col col-md-6">
+													<select name="disabledSelect" id="disabledSelect"
+														class="form-control" ng-model="form.loaiBanh.maLoaiBanh">
+														<option ng-repeat="option in db.loai"
+															ng-value="option.maLoaiBanh">
+															{{option.tenLoaiBanh}}</option>
+													</select>
+												</div>
+												<!-- <div class="col col-md-6"><input type="file" class="form-control" name="anh"
+														onchange="angular.element(this).scope().setFile(this)"></div>
+												{{theFile.name}} -->
+												<div class="col col-md-6"><input type="file" class="form-control"
+														name="anh" id="anh"
+														onchange="angular.element(this).scope().imageChanged(this.files)">
+												</div>
+											</div>
 										</div>
-										<button type="submit" class="btn btn-primary btn-sm" ng-click="update()">
+
+
+										<button type="submit" class="btn btn-primary btn-sm" ng-click="update()" ng-show="put">
 											<i class="fa fa-dot-circle-o"></i> Cập nhật
+										</button>
+										<button type="submit" class="btn btn-primary btn-sm" ng-click="save()" ng-show="post">
+											<i class="fa fa-dot-circle-o"></i> Thêm mới
+										</button>
+										
+										<button type="submit" class="btn btn-primary btn-sm" ng-click="reset()">
+											<i class="fa fa-dot-circle-o"></i> Làm mới
 										</button>
 									</form>
 
@@ -112,10 +144,11 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat=" item in db.sanpham">
+										<tr ng-repeat=" item in pager.db">
 											<td>{{item.maSP}}</td>
 											<td>{{item.loaiBanh.tenLoaiBanh}}</td>
 											<td><img th:src="@{/img/{{item.anh}}}" alt=""></td>
+											<!-- <td><img ng-src="{{'/img/item.anh'}}" style="max-width:100%;height: 50px"></td> -->
 											<td>{{item.tenSP}}</td>
 											<td>{{item.soLuong}}</td>
 											<td>{{item.ghiChu}}</td>
@@ -125,8 +158,10 @@
 											<td>
 												<button ng-click="edit(item.maSP)" class="fa fa-pencil"></button>
 											</td>
-											<td><a class="fa fa-eye-slash"></a>
-												<a class="fa fa-eye"></a>
+											<td><a ng-click="updateAvailability(item.maSP)" class="fa fa-eye-slash"
+													ng-show="item.isAvailable == false"></a>
+												<a ng-click="updateAvailability(item.maSP)" class="fa fa-eye"
+													ng-show="item.isAvailable == true"></a>
 											</td>
 											<td>
 												<a class="fa fa-remove"></a>
@@ -134,38 +169,33 @@
 										</tr>
 								</table>
 								<div>
-									<ul class="pagination">
-										<li class="page-item"><a class="page-link"
-												th:href="@{/trangchu/sanpham/page/1}">First</a></li>
-
-										<li class="${current == 1}? 'page-item disabled' : 'page-item'">
-											<a class="page-link" aria-label="Previous"
-												th:href="@{|${baseUrl}${current - 1}|}">
-												<span aria-hidden="true">&laquo;</span>
-												<span class="sr-only">Previous</span>
-											</a>
-										</li>
-
-										<li th:each=" item : ${#numbers.sequence(begin,end)}"
-											th:class="${item == current ? 'page-item active':'page-item'}">
-											<a class="page-link" th:href="@{|${baseUrl}${item}|}">
-												<span th:text='${item}'>1</span>
-											</a>
-										</li>
-
-										<li class="${current == 1}? 'page-item disabled' : 'page-item'">
-											<a class="page-link" aria-label="Previous"
-												th:href="@{|${baseUrl}${current + 1}|}">
-												<span aria-hidden="true">&raquo;</span>
-												<span class="sr-only">Next</span>
-											</a>
-										</li>
-
-										<li th:class="${current == total}? 'page-item disabled' : 'page-item'">
-											<a class="page-link" th:href="@{|${baseUrl}${total}|}">Last</a>
-										</li>
-									</ul>
-
+									
+										<ul class="pagination">
+											<li class="page-item">
+												<a class="page-link" aria-label="Previous">
+												  <button ng-click="pager.first()">First</button>
+												</a>
+											  </li>
+											<li class="page-item">
+											  <a class="page-link" >
+												<button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
+											  </a>
+											</li>
+	
+											<li class="page-item"><a class="page-link">{{pager.page + 1}} of {{pager.count}}</a></li>
+											
+											<li class="page-item">
+											  <a class="page-link">
+												<button aria-hidden="true" ng-click="pager.next()">&raquo;</button>                                         
+											  </a>
+											</li>
+											<li class="page-item">
+												<a class="page-link">
+												  <button ng-click="pager.last()">Last</button>
+												</a>
+											  </li>
+										  </ul>
+										  
 								</div>
 
 							</div> <!-- /.table-stats -->

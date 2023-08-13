@@ -3,6 +3,8 @@ package com.poly.asm_nhom_6.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -57,18 +59,23 @@ public class NguoiDung implements Serializable {
     @Column(name = "vai_tro")
     Integer vaiTro;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<DanhGia> danhGias;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<HoaDon> hoaDons;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<YourVoucher> yourVouchers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<ThichSanPham> thichSanPhams;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<GioHangChiTiet> gioHangChiTiets;
 
