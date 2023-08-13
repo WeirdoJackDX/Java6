@@ -4,7 +4,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Trangchu</title>
+	<meta name="description" content="Ela Admin - HTML5 Admin Template">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+	<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
@@ -19,10 +24,13 @@
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
 	<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	
 
 </head>
 
-<body>
+<body ng-app="loaiSp-app" ng-controller="loaiSp-ctrl">
+
 	<!-- Left Panel (menu)-->
 
 	<div th:replace="~{admin/fragment :: aside}"></div>
@@ -36,7 +44,6 @@
 	<!-- Header (menu)-->
 
 	<!-- Right Panel -->
-
 	<div id="right-panel" class="right-panel">
 		<div class="content">
 			<div class="animated fadeIn">
@@ -45,6 +52,7 @@
 						<div class="card">
 							<div class="card-header">
 								<strong class="card-title">Danh mục loại bánh</strong>
+								
 							</div>
 							<div class="table-stats order-table ov-h">
 								<table class="table ">
@@ -57,17 +65,43 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="loaisp : ${loaibanh}">
-											<td th:text="${loaisp.maLoaiBanh}"></td>
-											<td th:text="${loaisp.tenLoaiBanh}"></td>
-											<td th:text="${loaisp.ghiChu}"></td>
+										<tr ng-repeat=" item in pager.db">
+											<td>{{item.maLoaiBanh}}</td>
+											<td>{{item.tenLoaiBanh}}</td>
+											<td>{{item.ghiChu}}</td>
 											<td>
-												<a
-													th:href="@{/trangchu/loaisanpham/edit/__${loaisp.maLoaiBanh}__}"
-													class="fa fa-pencil"></a>
+												<button ng-click="edit(item.maLoaiBanh)" class="fa fa-pencil"></button>
 											</td>
 										</tr>
 								</table>
+								<ul class="pagination">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <a class="page-link" aria-label="Previous">
+                                              <button ng-click="pager.first()">First</button>
+                                             
+                                            </a>
+                                          </li>
+                                        <li class="page-item">
+                                          <a class="page-link" >
+                                            <button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
+                                          </a>
+                                        </li>
+
+                                        <li class="page-item"><a class="page-link">{{pager.page + 1}} of {{pager.count}}</a></li>
+                                        
+                                        <li class="page-item">
+                                          <a class="page-link">
+                                            <button aria-hidden="true" ng-click="pager.next()">&raquo;</button>                                         
+                                          </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link">
+                                              <button ng-click="pager.last()">Last</button>
+                                            </a>
+                                          </li>
+                                      </ul>
+                                      </ul>
 							</div> <!-- /.table-stats -->
 						</div>
 					</div>
@@ -75,52 +109,58 @@
 					<div class="col-lg-6">
 						<div class="card">
 							<div class="card-header">
-								<strong>Chỉnh sửa thông tin</strong><p th:text="${message}" style="color: red;"></p>
+								<strong>Chỉnh sửa thông tin</strong>
+								<p th:text="${message}" style="color: red;"></p>
 							</div>
 
 							<div class="card-body card-block">
-
-								<form method="post" th:object="${loai}">		
-									<div class="form-group" th:if="${loai.maLoaiBanh != null}"> <label for="nf-email" class=" form-control-label">Mã Loại</label>								
-										<input th:value="${loai.maLoaiBanh}"  type="text" id="maLoaiBanh" name="maLoaiBanh" class="form-control" readonly>
-									</div>
-												
-									<div class="form-group"> <label for="nf-email" class=" form-control-label">Tên</label>
-										<input th:value="${loai.tenLoaiBanh}"  type="text" id="tenLoaiBanh" placeholder="Tên.." name="tenLoaiBanh" class="form-control">
+								<form method="post" name="frmLoai">
+									<div class="form-group"> <label for="nf-email" class=" form-control-label">Mã
+											Loại</label>
+										<input ng-model="form.maLoaiBanh" type="text" id="maLoaiBanh" name="maLoaiBanh"
+											class="form-control" readonly>
 									</div>
 
-									<div class="form-group"><label for="nf-password" class=" form-control-label">Mô tả</label>
-										<input th:value="${loai.ghiChu}" type="text" id="ghiChu" name="ghiChu" placeholder="Mô tả.." class="form-control">
+									<div class="form-group"> <label for="nf-email"
+											class=" form-control-label">Tên</label>
+										<input ng-model="form.tenLoaiBanh" type="text" id="tenLoaiBanh"
+											placeholder="Tên.." name="tenLoaiBanh" class="form-control" required>
+											<div ng-hide="frmLoai.tenLoaiBanh.$valid" style="color:brown">Vui lòng nhâp tên loại</div>
 									</div>
 									
-									<button th:if="${loai.maLoaiBanh == null}" th:formaction="@{/trangchu/loaisanpham/add/submit}" 
-									type="submit" class="btn btn-primary btn-sm">
+									<div class="form-group"><label for="nf-password" class=" form-control-label">Mô
+											tả</label>
+										<input ng-model="form.ghiChu" type="text" id="ghiChu" name="ghiChu"
+											placeholder="Mô tả.." class="form-control">
+									</div>
+									
+									<button ng-show="post" type="submit" class="btn btn-primary btn-sm"
+										ng-click="save()">
 										<i class="fa fa-dot-circle-o"></i> Thêm
 									</button>
-									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/edit/submit}">
+									<button ng-show="put" type="submit" class="btn btn-primary btn-sm"
+										ng-click="update()">
 										<i class="fa fa-dot-circle-o"></i> Cập nhật
 									</button>
-									<button th:if="${loai.maLoaiBanh != null}" type="submit" class="btn btn-primary btn-sm" th:formaction="@{/trangchu/loaisanpham/delete/__${loai.maLoaiBanh}__}"  >
+									<button ng-show="delete" type="submit" class="btn btn-primary btn-sm"
+										ng-click="remove()">
 										<i class="fa fa-dot-circle-o"></i> Xóa
 									</button>
-									
-									<button class="btn btn-danger btn-sm" type="submit" th:formaction="@{/trangchu/loaisanpham/reset/submit}">
+									<button class="btn btn-danger btn-sm" type="submit" ng-click="reset()">
 										<i class="fa fa-ban"></i> Làm mới
 									</button>
-						
 								</form>
-								
 							</div>
-							
-							
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div th:replace="~{admin/fragment :: footer}"></div>
+		<script th:src="@{/js/loaiSp.js}"></script>
 	</div>
 
-	<!-- Right Panel -->
+
 
 	<!-- Scripts -->
 	<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>

@@ -15,7 +15,6 @@
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Sản Phẩm</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="ti-home"></i><a href="tables-basic.html">Nhập kho</a></li>
                             <li><i class="ti-package"></i><a th:href="@{/trangchu/sanpham}">Sản Phẩm</a></li>
                             <li><i class="ti-view-grid"></i><a th:href="@{/trangchu/loaisanpham}">Loại sản phẩm</a></li>
                         </ul>
@@ -23,7 +22,7 @@
                     </li>
                    
                     <li>
-                        <a href="widgets.html"> <i class="menu-icon ti-user"></i>Người dùng </a>
+                        <a th:href="@{/trangchu/nguoidung}"> <i class="menu-icon ti-user"></i>Người dùng </a>
                     </li>
                    <!-- <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Forms</a>
@@ -52,8 +51,7 @@
 	<header id="header" class="header">
             <div class="top-left">
                 <div class="navbar-header">
-                   <h1 class="m-0 display-5 font-weight-semi-bold"><span
-              class="text-primary font-weight-bold border px-3 mr-1">Love</span>CAKE</h1>
+                
                     <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
                 </div>
             </div>
