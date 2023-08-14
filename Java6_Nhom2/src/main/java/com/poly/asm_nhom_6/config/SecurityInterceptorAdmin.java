@@ -32,7 +32,7 @@ public class SecurityInterceptorAdmin implements HandlerInterceptor {
             return false;
         }
         if (admin.getVaiTro() == 1 && uri.startsWith("/admin")) {
-            error = "norightforstaff";// nếu vai trò đăng nhập bằng nhân viên và có dường dẫn mapping = /admin
+            error = "norightforstaff";// nếu vai trò đăng nhập bằngA nhân viên và có dường dẫn mapping = /admin
             response.sendRedirect("/errorPage?error=" + error);
             return false;
         }
