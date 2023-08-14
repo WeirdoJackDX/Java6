@@ -25,9 +25,7 @@ public interface ThichSanPhamDAO extends JpaRepository<ThichSanPham, Integer> {
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END)) "
                         + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham "
                         + "WHERE o.maSP = ?2 GROUP BY o ")
-        // + "HAVING SUM(CASE WHEN p.nguoiDung.maND = ?1 THEN 1 ELSE 0 END) > 0")
         ReportLike getAllSanPhamAndLikes_maSP(Integer maND, Integer maSP);
-        // ReportLike getAllSanPhamAndLikes_maSP(Integer maND, Integer maSP);
 
         @Query("SELECT new com.poly.asm_nhom_6.model.ReportLike(o, COUNT(p), SUM(CASE  WHEN p.nguoiDung.maND = :maND THEN 1 ELSE 0 END))"
                         + "FROM SanPham o LEFT JOIN ThichSanPham p ON o = p.sanPham WHERE o.tenSP LIKE %:keyWord% AND o.soLuong <> 0 AND o.isAvailable = TRUE GROUP BY o")

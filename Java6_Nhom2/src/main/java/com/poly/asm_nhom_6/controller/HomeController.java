@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,13 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.poly.asm_nhom_6.DAO.ChiTietHoaDonDAO;
-import com.poly.asm_nhom_6.DAO.GioHangChiTietDAO;
-import com.poly.asm_nhom_6.DAO.HoaDonDAO;
-import com.poly.asm_nhom_6.DAO.LoaiBanhDAO;
-import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
-import com.poly.asm_nhom_6.DAO.SanPhamDAO;
-import com.poly.asm_nhom_6.DAO.ThichSanPhamDAO;
 import com.poly.asm_nhom_6.model.ChiTietHoaDon;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
 import com.poly.asm_nhom_6.model.HoaDon;
@@ -36,7 +28,13 @@ import com.poly.asm_nhom_6.model.NguoiDung;
 import com.poly.asm_nhom_6.model.ReportLike;
 import com.poly.asm_nhom_6.model.SanPham;
 import com.poly.asm_nhom_6.model.ThichSanPham;
+import com.poly.asm_nhom_6.service.ChiTietHoaDonService;
+import com.poly.asm_nhom_6.service.GioHangChiTietService;
+import com.poly.asm_nhom_6.service.HoaDonService;
 import com.poly.asm_nhom_6.service.MailerServiceImpl;
+import com.poly.asm_nhom_6.service.NguoiDungService;
+import com.poly.asm_nhom_6.service.SanPhamService;
+import com.poly.asm_nhom_6.service.ThichSanPhamService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -53,28 +51,25 @@ public class HomeController {
 	HttpSession session;
 
 	@Autowired
-	SanPhamDAO sanPhamDAO;
+	SanPhamService sanPhamService;
 
 	@Autowired
-	LoaiBanhDAO loaiBanhDAO;
+	ThichSanPhamService thichSanPhamService;
 
 	@Autowired
-	ThichSanPhamDAO thichSanPhamDAO;
+	NguoiDungService nguoiDungService;
 
 	@Autowired
-	NguoiDungDAO nguoiDungDAO;
+	GioHangChiTietService gioHangChiTietService;
 
 	@Autowired
-	GioHangChiTietDAO gioHangChiTietDAO;
+	HoaDonService hoaDonService;
+
+	@Autowired
+	ChiTietHoaDonService chiTietHoaDonService;
 
 	@Autowired
 	MailerServiceImpl mailer;
-
-	@Autowired
-	HoaDonDAO hoaDonDAO;
-
-	@Autowired
-	ChiTietHoaDonDAO cthdDAO;
 
 	public void demo(String email, String subject, String body) {
 		mailer.queue(email, subject, body);
@@ -103,7 +98,7 @@ public class HomeController {
 	public Page<ReportLike> filt(Pageable pageable) {
 		String keyWord = (String) session.getAttribute("search");
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		Page<ReportLike> page = thichSanPhamDAO.getAllSanPham(nguoiDung == null ? 0 : nguoiDung.getMaND(),
+		Page<ReportLike> page = thichSanPhamService.getAllSanPham(nguoiDung == null ? 0 : nguoiDung.getMaND(),
 				keyWord == null ? "" : keyWord, pageable);
 		return page;
 	}
@@ -135,17 +130,17 @@ public class HomeController {
 			model.addAttribute("message", "Xác nhận mật khẩu không chính xác!");
 		} else {
 			nguoiDung.setMatKhau(matKhau2);
-			ND = nguoiDungDAO.findByEmailLike(nguoiDung.getEmail());
+			ND = nguoiDungService.findByEmailLike(nguoiDung.getEmail());
 			if (ND != null) {
 				model.addAttribute("message", "Email đã được sử dụng!");
 			} else {
-				ND = nguoiDungDAO.findByTaiKhoanLike(nguoiDung.getTaiKhoan());
+				ND = nguoiDungService.findByTaiKhoanLike(nguoiDung.getTaiKhoan());
 				if (ND != null) {
 					model.addAttribute("message", "Tài khoản đã được đăng kí!");
 				} else {
 					demo(nguoiDung.getEmail(), "", "");
 					nguoiDung.setVaiTro(0);
-					nguoiDungDAO.save(nguoiDung);
+					nguoiDungService.save(nguoiDung);
 					this.dangKy = true;
 					return "redirect:/user/home/index";
 				}
@@ -186,7 +181,7 @@ public class HomeController {
 			if (nguoiDung != null) {
 				nguoiDung.getVaiTro();
 				nguoiDung.getMaND();
-				Long soLuongSanPham = gioHangChiTietDAO.countCartById(nguoiDung.getMaND());
+				Long soLuongSanPham = gioHangChiTietService.countCartById(nguoiDung.getMaND());
 				model.addAttribute("test", soLuongSanPham);
 				model.addAttribute("nguoiDung", nguoiDung);
 			} else {
@@ -204,15 +199,15 @@ public class HomeController {
 	public Map<String, Object> cartAdd(Model model, @RequestParam("maSP") Integer maSP,
 			@RequestParam("maND") Integer maND, @RequestParam("soLuongSanPham") Integer soLuongSanPham) {
 		Map<String, Object> response = new HashMap<>();
-		NguoiDung nguoiDung = nguoiDungDAO.findByMaNDLike(maND);
-		SanPham sanPham = sanPhamDAO.findByMaSPLike(maSP);
-		GioHangChiTiet gioHangChiTiet = gioHangChiTietDAO.findByMaNDAndMaGioHang(maND, maSP);
+		NguoiDung nguoiDung = nguoiDungService.findByMaNDLike(maND);
+		SanPham sanPham = sanPhamService.findByMaSPLike(maSP);
+		GioHangChiTiet gioHangChiTiet = gioHangChiTietService.findByMaNDAndMaGioHang(maND, maSP);
 		if (sanPham.getSoLuong() < soLuongSanPham) {
 			response.put("message", "Số lượng bánh không đủ để cung cấp!");
 		} else {
 			response.put("message", "0");
 			if (gioHangChiTiet == null) {
-				gioHangChiTietDAO.save(new GioHangChiTiet(maND, soLuongSanPham, new Date(), nguoiDung, sanPham));
+				gioHangChiTietService.save(new GioHangChiTiet(maND, soLuongSanPham, new Date(), nguoiDung, sanPham));
 			} else {
 				if (gioHangChiTiet.getSoLuong() + soLuongSanPham > sanPham.getSoLuong()) {
 					response.put("message",
@@ -220,13 +215,13 @@ public class HomeController {
 				} else {
 					Integer soLuongMoi = gioHangChiTiet.getSoLuong() + soLuongSanPham;
 					gioHangChiTiet.setSoLuong(soLuongMoi);
-					gioHangChiTietDAO.save(gioHangChiTiet);
+					gioHangChiTietService.save(gioHangChiTiet);
 				}
 
 			}
 		}
 		response.put("success", true);
-		Long amount = gioHangChiTietDAO.countCartById(maND);
+		Long amount = gioHangChiTietService.countCartById(maND);
 		response.put("val", amount);
 		return response;
 	}
@@ -235,12 +230,12 @@ public class HomeController {
 	@PostMapping("/user/cart/updateMinus")
 	public Long cartUpdateMinus(Model model, @RequestParam("maGH") Integer maGH) {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		GioHangChiTiet ghct = gioHangChiTietDAO.findById(maGH).get();
+		GioHangChiTiet ghct = gioHangChiTietService.findById(maGH);
 		if (ghct.getSoLuong() > 1) {
 			ghct.setSoLuong(ghct.getSoLuong() - 1);
-			gioHangChiTietDAO.save(ghct);
+			gioHangChiTietService.save(ghct);
 		}
-		Long tienBanh = gioHangChiTietDAO.totalPrice(nguoiDung.getMaND());
+		Long tienBanh = gioHangChiTietService.totalPrice(nguoiDung.getMaND());
 		return tienBanh;
 	}
 
@@ -248,10 +243,10 @@ public class HomeController {
 	@PostMapping("/user/cart/updatePlus")
 	public Long cartUpdatePlus(Model model, @RequestParam("maGH") Integer maGH) {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		GioHangChiTiet ghct = gioHangChiTietDAO.findById(maGH).get();
+		GioHangChiTiet ghct = gioHangChiTietService.findById(maGH);
 		ghct.setSoLuong(ghct.getSoLuong() + 1);
-		gioHangChiTietDAO.save(ghct);
-		Long tienBanh = gioHangChiTietDAO.totalPrice(nguoiDung.getMaND());
+		gioHangChiTietService.save(ghct);
+		Long tienBanh = gioHangChiTietService.totalPrice(nguoiDung.getMaND());
 		return tienBanh;
 	}
 
@@ -260,10 +255,10 @@ public class HomeController {
 	public Map<String, Object> remove(@RequestParam("maGH") Integer maGH) {
 		Map<String, Object> response = new HashMap<>();
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		GioHangChiTiet ghct = gioHangChiTietDAO.findById(maGH).get();
-		gioHangChiTietDAO.delete(ghct);
-		Long tienBanh = gioHangChiTietDAO.totalPrice(nguoiDung.getMaND());
-		Long amount = gioHangChiTietDAO.countCartById(nguoiDung.getMaND());
+		GioHangChiTiet ghct = gioHangChiTietService.findById(maGH);
+		gioHangChiTietService.delete(ghct);
+		Long tienBanh = gioHangChiTietService.totalPrice(nguoiDung.getMaND());
+		Long amount = gioHangChiTietService.countCartById(nguoiDung.getMaND());
 		response.put("tienBanh", tienBanh);
 		response.put("val", amount);
 		return response;
@@ -287,14 +282,14 @@ public class HomeController {
 	public Map<String, Object> like(@RequestParam("maSP") Integer maSP) {
 		Map<String, Object> response = new HashMap<>();
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		SanPham sanPham = sanPhamDAO.findByMaSPLike(maSP);
-		ThichSanPham thichSanPham = thichSanPhamDAO.findByMaNDAndMaSPLike(nguoiDung.getMaND(), maSP);
+		SanPham sanPham = sanPhamService.findByMaSPLike(maSP);
+		ThichSanPham thichSanPham = thichSanPhamService.findByMaNDAndMaSPLike(nguoiDung.getMaND(), maSP);
 		if (thichSanPham == null) {
-			thichSanPhamDAO.save(new ThichSanPham(nguoiDung, sanPham));
+			thichSanPhamService.save(new ThichSanPham(nguoiDung, sanPham));
 			response.put("success", true);
 			response.put("message", "0");
 		} else {
-			thichSanPhamDAO.delete(thichSanPham);
+			thichSanPhamService.delete(thichSanPham);
 			response.put("success", true);
 			response.put("message", "1");
 		}
@@ -305,11 +300,12 @@ public class HomeController {
 	public String detail(@RequestParam("maSP") Integer maSP, @RequestParam("maLoai") Integer maLoai, Model model) {
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 		header(model);
-		ReportLike reportLike = thichSanPhamDAO.getAllSanPhamAndLikes_maSP(nguoiDung == null ? 0 : nguoiDung.getMaND(),
+		ReportLike reportLike = thichSanPhamService.getAllSanPhamAndLikes_maSP(
+				nguoiDung == null ? 0 : nguoiDung.getMaND(),
 				maSP);
 		model.addAttribute("reportLike", reportLike);
 
-		List<ReportLike> items = thichSanPhamDAO
+		List<ReportLike> items = thichSanPhamService
 				.getAllSanPhamAndLikeTheoLoai(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(), maLoai, 8);
 		model.addAttribute("items", items);
 
@@ -320,7 +316,8 @@ public class HomeController {
 	public String index(Model model) {
 		header(model);
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		List<ReportLike> items = thichSanPhamDAO.getAllSanPhamAndLike(nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
+		List<ReportLike> items = thichSanPhamService.getAllSanPhamAndLike(
+				nguoiDung == null ? 0 : (int) nguoiDung.getMaND(),
 				12);
 		model.addAttribute("items", items);
 		return "/user/index";
@@ -338,7 +335,7 @@ public class HomeController {
 			@RequestParam("matKhau") String matKhau) {
 		Map<String, Object> response = new HashMap<>();
 
-		NguoiDung nguoiDung = nguoiDungDAO.findByTaiKhoanAndMatKhauLike(taiKhoan, matKhau);
+		NguoiDung nguoiDung = nguoiDungService.findByTaiKhoanAndMatKhauLike(taiKhoan, matKhau);
 		// Kiểm tra tài khoản và mật khẩu
 		if (nguoiDung != null) {
 			// Đăng nhập thành công
@@ -370,7 +367,7 @@ public class HomeController {
 	public String changeInfo(Model model, @ModelAttribute("user") NguoiDung nguoiDung) {
 		header(model);
 		nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		NguoiDung user = nguoiDungDAO.findById(nguoiDung.getMaND()).get();
+		NguoiDung user = nguoiDungService.findById(nguoiDung.getMaND());
 		model.addAttribute("user", user);
 		return "user/changeInfo";
 	}
@@ -383,7 +380,7 @@ public class HomeController {
 		user.setDiaChi(nguoiDung.getDiaChi());
 		user.setSdt(nguoiDung.getSdt());
 		user.setGioiTinh(nguoiDung.getGioiTinh());
-		nguoiDungDAO.save(user);
+		nguoiDungService.save(user);
 		return "redirect:/user/home/index";
 	}
 
@@ -402,8 +399,8 @@ public class HomeController {
 	public String cart(Model model) {
 		header(model);
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
-		NguoiDung user = nguoiDungDAO.findById(nguoiDung.getMaND()).get();
-		Long tienBanh = gioHangChiTietDAO.totalPrice(nguoiDung.getMaND());
+		NguoiDung user = nguoiDungService.findById(nguoiDung.getMaND());
+		Long tienBanh = gioHangChiTietService.totalPrice(nguoiDung.getMaND());
 		model.addAttribute("user", user);
 		model.addAttribute("tienBanh", tienBanh);
 		return "user/cart";
@@ -425,28 +422,28 @@ public class HomeController {
 	public String invoice() {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
-		user = nguoiDungDAO.findById(user.getMaND()).get();
+		user = nguoiDungService.findById(user.getMaND());
 		HoaDon hd = new HoaDon(null, null, timestamp, null, user, null);
-		hoaDonDAO.save(hd);
+		hoaDonService.save(hd);
 		for (GioHangChiTiet ghct : user.getGioHangChiTiets()) {
 			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
 					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
-			cthdDAO.save(cthd);
-			SanPham sp = sanPhamDAO.findById(ghct.getSanPham().getMaSP()).get();
+			chiTietHoaDonService.save(cthd);
+			SanPham sp = sanPhamService.findById(ghct.getSanPham().getMaSP());
 			sp.setSoLuong(sp.getSoLuong() - ghct.getSoLuong());
-			sanPhamDAO.save(sp);
-			gioHangChiTietDAO.delete(ghct);
+			sanPhamService.save(sp);
+			gioHangChiTietService.delete(ghct);
 		}
-		HoaDon recent = hoaDonDAO.getRecentReceipt(user.getMaND());
+		HoaDon recent = hoaDonService.getRecentReceipt(user.getMaND());
 		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
 	}
 
 	@RequestMapping("/user/invoice/{id}")
 	public String invoiceDetail(@PathVariable("id") Integer id, Model model) {
 		header(model);
-		HoaDon hd = hoaDonDAO.findById(id).get();
+		HoaDon hd = hoaDonService.findById(id);
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
-		user = nguoiDungDAO.findById(user.getMaND()).get();
+		user = nguoiDungService.findById(user.getMaND());
 		if (hd.getNguoiDung().getMaND().equals(user.getMaND()) || user.getVaiTro() == 1) {
 			model.addAttribute("user", user);
 			model.addAttribute("hd", hd);
@@ -461,7 +458,7 @@ public class HomeController {
 		header(model);
 		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
 		Pageable pageable = PageRequest.of(p.orElse(0), 4);
-		Page<HoaDon> hds = hoaDonDAO.findHoaDonByMaND(user.getMaND(), pageable);
+		Page<HoaDon> hds = hoaDonService.findHoaDonByMaND(user.getMaND(), pageable);
 		var numberOfPages = hds.getTotalPages();
 		model.addAttribute("invoice", hds);
 		model.addAttribute("currIndex", p.orElse(0));
