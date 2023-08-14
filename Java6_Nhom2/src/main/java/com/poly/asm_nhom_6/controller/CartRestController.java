@@ -1,8 +1,6 @@
 package com.poly.asm_nhom_6.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.poly.asm_nhom_6.DAO.GioHangChiTietDAO;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
-import com.poly.asm_nhom_6.DTO.CartDTO;
 import com.poly.asm_nhom_6.model.GioHangChiTiet;
 import com.poly.asm_nhom_6.model.NguoiDung;
 
@@ -34,32 +31,19 @@ public class CartRestController {
     @Autowired
     GioHangChiTietDAO gioHangChiTietDAO;
 
-    List<CartDTO> listCartDTO = new ArrayList<>();
-
     @GetMapping("/rest/cart")
     public Map<String, Object> getCart() {
         Map<String, Object> map = new HashMap<>();
         NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
         nguoiDung = nguoiDungDAO.findById(nguoiDung.getMaND()).get();
-        List<GioHangChiTiet> gioHangChiTiets = nguoiDung.getGioHangChiTiets();
-        listCartDTO = new ArrayList<CartDTO>();
-        for (GioHangChiTiet gioHangChiTiet : gioHangChiTiets) {
-            CartDTO cartDTO = new CartDTO();
-            cartDTO.setGioHangChiTiet(gioHangChiTiet);
-            cartDTO.setIsChecked(false);
-            listCartDTO.add(cartDTO);
-        }
         map.put("user", nguoiDung);
-        map.put("products", listCartDTO);
+        map.put("products", nguoiDung.getGioHangChiTiets());
         return map;
     }
 
     @GetMapping("/rest/cart/{id}")
-    public CartDTO getOne(@PathVariable("id") Integer id) {
-        GioHangChiTiet ghct = gioHangChiTietDAO.findById(id).get();
-        CartDTO dto = new CartDTO();
-        dto.setGioHangChiTiet(ghct);
-        return dto;
+    public GioHangChiTiet getOne(@PathVariable("id") Integer id) {
+        return gioHangChiTietDAO.findById(id).get();
     }
 
     @PutMapping("/rest/cart/{id}")

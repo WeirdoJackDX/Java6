@@ -4,11 +4,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
-	<meta name="description" content="">
+	<meta name="description" content="Ela Admin - HTML5 Admin Template">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -24,7 +21,6 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/weathericons@2.1.0/css/weather-icons.css" rel="stylesheet" />
 	<link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.9.0/dist/fullcalendar.min.css" rel="stylesheet" />
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
 	<style>
 		#weatherWidget .currentDesc {
@@ -70,7 +66,7 @@
 	</style>
 </head>
 
-<body ng-app="invoice-app" ng-controller="invoice-ctrl">
+<body>
 	<!-- Left Panel (menu)-->
 
 	<div th:replace="~{admin/fragment :: aside}"></div>
@@ -173,53 +169,29 @@
 						<div class="card">
 							<div class="card-body">
 								<h4 class="card-title box-title">Hóa đơn gần đây</h4>
+
+
 								<table id="bootstrap-data-table" class="table table-striped table-bordered">
 									<thead>
 										<tr>
 											<th>Mã hóa đơn</th>
 											<th>Mã người dùng</th>
-											<th>Ngày tạo</th>
-											<th>Tổng tiền</th>
+											<th> Ngày tạo</th>
+											<th>Xem</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat="item in pager.db">
-											<td>{{item.hoaDon.maHoaDon}}</td>
-											<td>{{item.hoaDon.nguoiDung.maND}}</td>
-											<td>{{item.hoaDon.ngayTao | date:'MM/dd/yyyy HH:MM:ss'}}</td>
-											<td>{{item.tongTien}}</td>
+										<tr th:each="hd: ${listHD}">
+											<td th:text="${hd.maHoaDon}"></td>
+											<td th:text="${hd.maND}"></td>
+											<td th:text="${hd.ngayTao}"></td>
+											<td>
+												<a th:href="@{/user/invoice/__${hd.maHoaDon}__}" class="fa fa-eye"></a>
+											</td>
 										</tr>
 									</tbody>
 								</table>
-								<ul class="pagination">
-									<ul class="pagination">
-										<li class="page-item">
-											<a class="page-link" aria-label="Previous">
-												<button ng-click="pager.first()">First</button>
 
-											</a>
-										</li>
-										<li class="page-item">
-											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
-											</a>
-										</li>
-
-										<li class="page-item"><a class="page-link">{{pager.page + 1}} of
-												{{pager.count}}</a></li>
-
-										<li class="page-item">
-											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.next()">&raquo;</button>
-											</a>
-										</li>
-										<li class="page-item">
-											<a class="page-link">
-												<button ng-click="pager.last()">Last</button>
-											</a>
-										</li>
-									</ul>
-								</ul>
 
 							</div> <!-- /.card-body -->
 						</div><!-- /.card -->
@@ -310,17 +282,15 @@
 		<!-- Footer -->
 		<div th:replace="~{admin/fragment :: footer}"></div>
 		<!-- /.site-footer -->
-
 	</div>
 	<!-- /#right-panel -->
 
 	<!-- Scripts -->
-	<script th:src="@{/js/invoice.js}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-	<script th:src="@{/assets/js/main.js}"></script>
+	<script src="../assets/js/main.js"></script>
 
 	<!--  Chart js -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.bundle.min.js"></script>
@@ -339,6 +309,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/moment.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.9.0/dist/fullcalendar.min.js"></script>
 	<script src="../assets/js/init/fullcalendar-init.js"></script>
+
 </body>
 
 </html>

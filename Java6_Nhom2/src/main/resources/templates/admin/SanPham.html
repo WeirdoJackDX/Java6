@@ -4,12 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Love-Cake ADMIN</title>
-	<meta name="description" content="Ela Admin - HTML5 Admin Template">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-	<link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
 
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
@@ -24,10 +19,10 @@
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
 	<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
 </head>
 
-<body ng-app="sp-app" ng-controller="sp-ctrl">
+<body>
 	<!-- Left Panel (menu)-->
 
 	<div th:replace="~{admin/fragment :: aside}"></div>
@@ -49,90 +44,43 @@
 					<div class="col-lg-12">
 						<div class="card">
 							<div class="card-header">
+								<strong class="card-title">Sản phẩm</strong>
+								<a th:href="@{/trangchu/sanpham/add}" class="fa fa-plus"> Thêm sản phẩm</a>
 								<nav aria-label="Page navigation example">
+									<div>
+										<ul class="pagination">
+											<li class="page-item"><a class="page-link"
+													th:href="@{/trangchu/sanpham/page/1}">First</a></li>
 
-									<form class="row form-horizontal" name="frmSanPham">
-										<div class="col-sm-4 text-left">
-											<label for="image">
-												<img th:src="@{/img/{{form.anh}}}" style="width: 300px; height: 200px">
-											</label>
-											<button ng-show="post" type="submit" class="btn btn-primary btn-sm"
-												ng-click="save()">
-												<i class="fa fa-plus-square"></i> Thêm
-											</button>
-											<button ng-show="put" type="submit" class="btn btn-primary btn-sm"
-												ng-click="update()">
-												<i class="fa fa-dot-circle-o"></i> Cập nhật
-											</button>
-											<button ng-show="deleteShow" type="submit" class="btn btn-danger btn-sm"
-												ng-click="delete(form.maSP)">
-												<i class="fa fa-minus-square"></i> Xóa
-											</button>
-											<button class="btn btn-primary btn-sm" type="submit" ng-click="reset()">
-												<i class="fa fa-refresh"></i> Làm mới
-											</button>
-										</div>
-										<div class="col-sm-8">
-											<div class="row form-group">
-												<div class="col col-md-6">
-													<input type="text" placeholder="Tên" class="form-control"
-														name="tenSP" ng-model="form.tenSP" required>
-													<div ng-hide="frmSanPham.tenSP.$valid" style="color:brown">Không để
-														trống</div>
-												</div>
+											<li class="${current == 1}? 'page-item disabled' : 'page-item'">
+												<a class="page-link" aria-label="Previous"
+													th:href="@{|${baseUrl}${current - 1}|}">
+													<span aria-hidden="true">&laquo;</span>
+													<span class="sr-only">Previous</span>
+												</a>
+											</li>
 
-												<div class="col col-md-6"><input type="text" placeholder="Mã sản phẩm"
-														class="form-control" name="maSP" ng-model="form.maSP" readonly>
-												</div>
-											</div>
-											<div class="row form-group">
-												<div class="col col-md-4"><input type="number" placeholder="Giá bán"
-														class="form-control" name="giaBan" ng-model="form.giaBan" min=1
-														required>
-													<div ng-hide="frmSanPham.giaBan.$valid" style="color:brown">Không để
-														trống
-													</div>
-												</div>
+											<li th:each=" item : ${#numbers.sequence(begin,end)}"
+												th:class="${item == current ? 'page-item active':'page-item'}">
+												<a class="page-link" th:href="@{|${baseUrl}${item}|}">
+													<span th:text='${item}'>1</span>
+												</a>
+											</li>
 
-												<div class="col col-md-4"><input type="number" placeholder="Giá nhập"
-														class="form-control" name="giaNhap" ng-model="form.giaNhap"
-														min=1 required>
-													<div ng-hide="frmSanPham.giaNhap.$valid" style="color:brown">Không
-														để trống</div>
-												</div>
+											<li class="${current == 1}? 'page-item disabled' : 'page-item'">
+												<a class="page-link" aria-label="Previous"
+													th:href="@{|${baseUrl}${current + 1}|}">
+													<span aria-hidden="true">&raquo;</span>
+													<span class="sr-only">Next</span>
+												</a>
+											</li>
 
-												<div class="col col-md-4"><input type="number" placeholder="Số lượng"
-														class="form-control" name="soLuong" ng-model="form.soLuong"
-														min=1 required>
-													<div ng-hide="frmSanPham.soLuong.$valid" style="color:brown">Không
-														để trống</div>
-												</div>
-											</div>
-											<div class="row form-group">
-												<div class="col col-md-12"><textarea placeholder="Ghi chú"
-														class="form-control" name="ghiChu"
-														ng-model="form.ghiChu"></textarea></div>
-											</div>
-											<div class="row form-group">
-												<div class="col col-md-6">
-													Loại Bánh
-													<select name="loaibanh" class="form-control"
-														ng-model="form.loaiBanh.maLoaiBanh" required>
-														<option ng-repeat="option in db.loai" value="Loại bánh"
-															ng-value="option.maLoaiBanh">
-															{{option.tenLoaiBanh}} </option>
-													</select>
-													<div ng-hide="frmSanPham.loaibanh.$touched" style="color:brown">Loại
-														bánh không để trống</div>
-												</div>
+											<li th:class="${current == total}? 'page-item disabled' : 'page-item'">
+												<a class="page-link" th:href="@{|${baseUrl}${total}|}">Last</a>
+											</li>
+										</ul>
 
-												<div class="col col-md-6">
-													Ảnh<input type="file" class="form-control" name="anh" id="anh"
-														onchange="angular.element(this).scope().imageChanged(this.files)">
-												</div>
-											</div>
-										</div>
-									</form>
+									</div>
 
 								</nav>
 
@@ -152,66 +100,29 @@
 											<th>Giá bán</th>
 											<th>Chỉnh sửa</th>
 											<th>Trạng thái</th>
-											<th>Xóa</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr ng-repeat=" item in pager.items">
-											<td>{{item.maSP}}</td>
-											<td>{{item.loaiBanh.tenLoaiBanh}}</td>
-											<td><img th:src="@{/img/{{item.anh}}}" alt=""></td>
-											<!-- <td><img ng-src="{{'/img/item.anh'}}" style="max-width:100%;height: 50px"></td> -->
-											<td>{{item.tenSP}}</td>
-											<td>{{item.soLuong}}</td>
-											<td>{{item.ghiChu}}</td>
-											<td>{{item.giaBan}}</td>
-											<td>{{item.giaNhap}}</td>
+										<tr th:each="sp : ${sanpham.pageList}">
+											<td th:text="${sp.maSP}"></td>
+											<td th:text="${sp.loaiBanh.tenLoaiBanh}"></td>
+											<td><img th:src="@{/img/__${sp.anh}__}" width="60px"></td>
+											<td th:text="${sp.tenSP}"></td>
+											<td th:text="${sp.soLuong}"></td>
+											<td th:text="${sp.ghiChu}"></td>
+											<td th:text="${sp.giaNhap}"></td>
+											<td th:text="${sp.giaBan}"></td>
 											<td>
-												<button ng-click="edit(item.maSP)" class="fa fa-pencil"></button>
+												<a th:href="@{/trangchu/sanpham/edit/__${sp.maSP}__}"
+													class="fa fa-pencil"></a>
 											</td>
-											<td><a ng-click="updateAvailability(item.maSP)" class="fa fa-eye-slash"
-													ng-show="item.isAvailable == false"></a>
-												<a ng-click="updateAvailability(item.maSP)" class="fa fa-eye"
-													ng-show="item.isAvailable == true"></a>
-											</td>
-											<td>
-												<a class="fa fa-remove" ng-click="delete(item.maSP)"></a>
+											<td><a th:href="@{/trangchu/sanpham/an/__${sp.maSP}__}" class="fa fa-eye"
+													th:if="${sp.isAvailable} == true"></a>
+												<a th:href="@{/trangchu/sanpham/return/__${sp.maSP}__}"
+													class="fa fa-eye-slash" th:if="${sp.isAvailable} == false"></a>
 											</td>
 										</tr>
 								</table>
-								<div>
-									<ul class="pagination">
-
-										<li class="page-item">
-											<a class="page-link" aria-label="Previous">
-												<button ng-click="pager.first()">First</button>
-
-											</a>
-										</li>
-										<li class="page-item">
-											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.pre()"
-													class="fa fa-hand-o-left"></button></button>
-											</a>
-										</li>
-
-										<li class="page-item"><a class="page-link">{{pager.page + 1}} of
-												{{pager.count}}</a></li>
-
-										<li class="page-item">
-											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.next()"
-													class="fa fa-hand-o-right"></button></button>
-											</a>
-										</li>
-										<li class="page-item">
-											<a class="page-link">
-												<button ng-click="pager.last()">Last</button>
-											</a>
-										</li>
-									</ul>
-								</div>
-
 							</div> <!-- /.table-stats -->
 						</div>
 					</div>
@@ -220,18 +131,6 @@
 			</div>
 		</div>
 
-		<footer class="site-footer">
-			<div class="footer-inner bg-white">
-				<div class="row">
-					<div class="col-sm-6">
-						Copyright &copy; 2018 Ela Admin
-					</div>
-					<div class="col-sm-6 text-right">
-						Designed by <a href="https://colorlib.com">Colorlib</a>
-					</div>
-				</div>
-			</div>
-		</footer>
 
 	</div>
 
@@ -243,7 +142,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
 	<script th:src="@{/assets/js/main.js}"></script>
-	<script th:src="@{/js/sanpham.js}"></script>
+
 
 </body>
 
