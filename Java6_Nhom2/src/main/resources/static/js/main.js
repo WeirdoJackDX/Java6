@@ -3,7 +3,7 @@ function dangXuat() {
 	$.ajax({
 		url: '/user/logout', // Đường dẫn tới controller xử lý đăng nhập
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			var currentURL = window.location.href;
 			if (currentURL.includes("cart")) {
 				window.location.href = response.redirectUrl
@@ -12,7 +12,7 @@ function dangXuat() {
 				window.location = response.redirectUrl
 			}
 		},
-		error: function(xhr, status, error) {
+		error: function (xhr, status, error) {
 			console.log("Lỗi AJAX: " + error);
 		}
 	})
@@ -26,6 +26,23 @@ function thongBao(loai, message) {
 	})
 }
 
+function saveKeyWord() {
+	var keyWords = $('#keyWords').val();
+	$.ajax({
+		url: '/user/saveKeyWords', // Đường dẫn đến API hoặc endpoint xử lý yêu cầu
+		type: 'POST',
+		data: {
+			keyWord: keyWords
+		},
+		success: function (response) {
+		},
+		error: function (error) {
+			console.log('Lỗi AJAX: ' + error.status);
+		}
+	});
+}
+
+
 function likeSanPham(params) {
 	var maSP = $('#maSP' + params);
 	var luotThich = $('#luotThich' + params);
@@ -35,7 +52,7 @@ function likeSanPham(params) {
 		data: {
 			maSP: params
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.success) {
 				if (parseInt(response.message) === 0) {
 					like(maSP, luotThich);
@@ -43,10 +60,10 @@ function likeSanPham(params) {
 					unlike(maSP, luotThich);
 				}
 			} else {
-				test('Vui lòng đăng nhập để yêu thích sản phẩm');
+				test('Vui lòng đăng nhập để thích sản phẩm');
 			}
 		},
-		error: function(error) {
+		error: function (error) {
 			console.log('Lỗi AJAX: ' + error.status);
 		}
 	});
@@ -54,7 +71,7 @@ function likeSanPham(params) {
 }
 
 function like(maSP, luotThich) {
-	maSP.fadeOut(500, function() {
+	maSP.fadeOut(500, function () {
 		maSP.removeClass('fa-regular');
 		maSP.addClass('fa-solid');
 		maSP.fadeIn(300);
@@ -64,7 +81,7 @@ function like(maSP, luotThich) {
 }
 
 function unlike(maSP, luotThich) {
-	maSP.fadeOut(500, function() {
+	maSP.fadeOut(500, function () {
 		maSP.removeClass('fa-solid');
 		maSP.addClass('fa-regular');
 		maSP.fadeIn(300);
@@ -73,7 +90,7 @@ function unlike(maSP, luotThich) {
 	luotThich.text(soLuotThich - 1);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	var input1 = document.getElementById('taiKhoanLogin');
 	var input2 = document.getElementById('matKhauLogin');
 
@@ -102,7 +119,7 @@ function openGioHang() {
 	$.ajax({
 		url: '/user/cart/open', // Đường dẫn tới controller xử lý đăng nhập
 		type: 'POST',
-		success: function(response) {
+		success: function (response) {
 			if (response.success && parseInt(response.message) === 0) {
 				// Đăng nhập thành công
 				if (response.redirectUrl) {
@@ -114,7 +131,7 @@ function openGioHang() {
 				test('Vui lòng đăng nhập để mở giỏ hàng');
 			}
 		},
-		error: function(xhr, status, error) {
+		error: function (xhr, status, error) {
 			console.log("Lỗi AJAX: " + error);
 		}
 	});
@@ -158,7 +175,7 @@ function addToGioHang(maSP) {
 			maND: maND,
 			soLuongSanPham: soLuongSanPham
 		},
-		success: function(response) {
+		success: function (response) {
 			if (response.success) {
 				if (parseInt(response.message) === 0) {
 					thongBao('success', 'Thêm vào giỏ hàng thành công')
@@ -170,7 +187,7 @@ function addToGioHang(maSP) {
 				test('Vui lòng đăng nhập để thêm giỏ vào giỏ hàng');
 			}
 		},
-		error: function(xhr, status, error) {
+		error: function (xhr, status, error) {
 			console.log("Lỗi AJAX: " + error);
 		}
 	});

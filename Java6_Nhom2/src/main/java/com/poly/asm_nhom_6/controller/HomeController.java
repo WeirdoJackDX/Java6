@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,27 +82,26 @@ public class HomeController {
 
 	@GetMapping("/user/search")
 	public String search2(Model model) {
-		header(model);
-		session.setAttribute("keyWord", "");
+		session.setAttribute("search", "");
 		Pageable pageable = PageRequest.of(0, 12);
 		Page<ReportLike> page = filt(pageable);
 		model.addAttribute("page", page);
+		header(model);
 		return "user/shop";
 	}
 
 	@RequestMapping("/user/search")
 	public String search(Model model, @RequestParam("keyWords") String keyWord) {
-		header(model);
-		session.setAttribute("keyWord", keyWord);
+		session.setAttribute("search", keyWord);
 		Pageable pageable = PageRequest.of(0, 12);
 		Page<ReportLike> page = filt(pageable);
 		model.addAttribute("page", page);
-		model.addAttribute("tuKhoa", keyWord);
+		header(model);
 		return "user/shop";
 	}
 
 	public Page<ReportLike> filt(Pageable pageable) {
-		String keyWord = (String) session.getAttribute("keyWord");
+		String keyWord = (String) session.getAttribute("search");
 		NguoiDung nguoiDung = (NguoiDung) session.getAttribute("nguoiDung");
 		Page<ReportLike> page = thichSanPhamDAO.getAllSanPham(nguoiDung == null ? 0 : nguoiDung.getMaND(),
 				keyWord == null ? "" : keyWord, pageable);
@@ -162,6 +162,10 @@ public class HomeController {
 			dangNhap = false;
 			nguoiDung = new NguoiDung();
 		}
+
+		String tuKhoa = (String) session.getAttribute("keyWord");
+
+		model.addAttribute("keyWords", tuKhoa);
 
 		if (dangXuat) {
 			model.addAttribute("dangXuat", dangXuat);
@@ -269,6 +273,7 @@ public class HomeController {
 	@PostMapping("/user/logout")
 	public Map<String, Object> logout() {
 		session.removeAttribute("nguoiDung");
+		session.removeAttribute("keyWord");
 		Map<String, Object> response = new HashMap<>();
 		response.put("success", true);
 		response.put("message", "0");
@@ -464,17 +469,9 @@ public class HomeController {
 		return "/user/invoiceList";
 	}
 
-	// @ResponseBody
-	// @PostMapping("/user/cart/item/update")
-	// public String index2(Model model) {
-	// return "user/index";
-	// }
-
-	// @ResponseBody
-	// @PostMapping("/user/cart/item/update")
-	// public Item updateCardItem(@RequestBody Item item) {
-	// // Process the data received via AJAX
-	// Item updatedItem = cart.update(item.getId(), item.getQty());
-	// return updatedItem;
-	// }
+	@ResponseBody
+	@PostMapping("/user/saveKeyWords")
+	public void hehe(@RequestParam("keyWord") String keyWord) {
+		session.setAttribute("keyWord", keyWord);
+	}
 }

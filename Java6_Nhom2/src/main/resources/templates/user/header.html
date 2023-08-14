@@ -12,6 +12,7 @@
     rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="/css/style.css" rel="stylesheet">
+  <script src="/js/main.js"></script>
 </head>
 
 <body>
@@ -27,8 +28,9 @@
       <div class="col-lg-6 col-6 text-left">
         <form action="/user/search" method="POST">
           <div class="input-group">
-            <input type="text" class="form-control" name="keyWords" placeholder="Tìm kiếm chiếc bánh mà bạn yêu thích">
-            <button type="submit" class="btn border" style="background-color: #faefee;">
+            <input type="text" class="form-control" id="keyWords" name="keyWords" th:value="${keyWords}"
+              placeholder="Tìm kiếm chiếc bánh mà bạn yêu thích" onchange="saveKeyWord()">
+            <button type=" submit" class="btn border" style="background-color: #faefee;">
               <i class="fa-sharp fa-solid fa-magnifying-glass fa-xl" style="color: #d19c97;"></i>
               <span>Tìm kiếm</span>
             </button>
