@@ -140,6 +140,7 @@ public class HomeController {
 				} else {
 					demo(nguoiDung.getEmail(), "", "");
 					nguoiDung.setVaiTro(0);
+					nguoiDung.setIsBanned(false);
 					nguoiDungService.save(nguoiDung);
 					this.dangKy = true;
 					return "redirect:/user/home/index";

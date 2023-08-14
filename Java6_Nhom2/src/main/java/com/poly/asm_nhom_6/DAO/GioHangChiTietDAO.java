@@ -11,7 +11,7 @@ public interface GioHangChiTietDAO extends JpaRepository<GioHangChiTiet, Integer
     @Query("SELECT o FROM GioHangChiTiet o WHERE o.maGioHang LIKE ?1")
     Page<GioHangChiTiet> findByMaGioHang1(Integer maGioHang, Pageable pageable);
 
-    @Query("SELECT SUM(o.soLuong) FROM GioHangChiTiet o WHERE o.nguoiDung.maND = ?1")
+    @Query("SELECT COUNT(o) FROM GioHangChiTiet o WHERE o.nguoiDung.maND = ?1")
     Long countCartById(Integer maND);
 
     @Query("SELECT gh FROM GioHangChiTiet gh INNER JOIN gh.nguoiDung nd WHERE nd.hoTen LIKE ?1")
