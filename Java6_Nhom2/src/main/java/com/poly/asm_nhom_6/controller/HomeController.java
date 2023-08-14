@@ -178,9 +178,7 @@ public class HomeController {
 		}
 
 		try {
-			if (nguoiDung != null) {
-				nguoiDung.getVaiTro();
-				nguoiDung.getMaND();
+			if (nguoiDung != null && nguoiDung.getMaND() != null) {
 				Long soLuongSanPham = gioHangChiTietService.countCartById(nguoiDung.getMaND());
 				model.addAttribute("test", soLuongSanPham);
 				model.addAttribute("nguoiDung", nguoiDung);
