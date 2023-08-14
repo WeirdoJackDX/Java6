@@ -14,7 +14,6 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Sản Phẩm</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="ti-home"></i><a href="tables-basic.html">Nhập kho</a></li>
                             <li><i class="ti-package"></i><a th:href="@{/trangchu/sanpham}">Sản Phẩm</a></li>
                             <li><i class="ti-view-grid"></i><a th:href="@{/trangchu/loaisanpham}">Loại sản phẩm</a></li>
                         </ul>
@@ -22,7 +21,7 @@
                     </li>
 
                     <li>
-                        <a href="widgets.html"> <i class="menu-icon ti-user"></i>Người dùng </a>
+                        <a th:href="@{/trangchu/nguoidung}"> <i class="menu-icon ti-user"></i>Người dùng </a>
                     </li>
                     <!-- <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Forms</a>
