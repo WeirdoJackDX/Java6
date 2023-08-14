@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -50,7 +51,7 @@ public class SanPham implements Serializable {
     String tenSP;
 
     @NotNull(message = "Vui lòng nhập số lượng")
-    @Positive(message = "Số lượng phải lớn hơn 0")
+    @Min(value = 0, message = "Số lượng không được âm")
     @Column(name = "so_luong")
     Integer soLuong;// được hiểu là số lượng còn trong kho và kệ trưng bày
 

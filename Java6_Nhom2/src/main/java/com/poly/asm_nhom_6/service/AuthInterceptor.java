@@ -33,7 +33,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                     response.sendRedirect("/error404");
                     return false;
                 }
-                response.sendRedirect("/user/home/index");
+                // response.sendRedirect("/user/home/index");
                 return false;
             } else if (uri.contains("trangchu") && user.getVaiTro() != 1) {
                 response.sendRedirect("/error404");

@@ -336,7 +336,7 @@ public class HomeController {
 
 		NguoiDung nguoiDung = nguoiDungService.findByTaiKhoanAndMatKhauLike(taiKhoan, matKhau);
 		// Kiểm tra tài khoản và mật khẩu
-		if (nguoiDung != null && nguoiDung.getIsBanned() == true) {
+		if (nguoiDung != null && nguoiDung.getIsBanned() == false) {
 			// Đăng nhập thành công
 			session.setAttribute("nguoiDung", nguoiDung);
 			response.put("success", true);
@@ -415,26 +415,6 @@ public class HomeController {
 	public String contact(Model model) {
 		header(model);
 		return "user/contact";
-	}
-
-	@RequestMapping("/user/cart/purchase")
-	public String invoice() {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		NguoiDung user = (NguoiDung) session.getAttribute("nguoiDung");
-		user = nguoiDungService.findById(user.getMaND());
-		HoaDon hd = new HoaDon(null, null, timestamp, null, user, null);
-		hoaDonService.save(hd);
-		for (GioHangChiTiet ghct : user.getGioHangChiTiets()) {
-			ChiTietHoaDon cthd = new ChiTietHoaDon(null, ghct.getSoLuong(), ghct.getSanPham().getGiaBan(),
-					ghct.getSanPham().getGiaNhap(), hd, ghct.getSanPham());
-			chiTietHoaDonService.save(cthd);
-			SanPham sp = sanPhamService.findById(ghct.getSanPham().getMaSP());
-			sp.setSoLuong(sp.getSoLuong() - ghct.getSoLuong());
-			sanPhamService.save(sp);
-			gioHangChiTietService.delete(ghct);
-		}
-		HoaDon recent = hoaDonService.getRecentReceipt(user.getMaND());
-		return "redirect:/user/invoice/" + recent.getMaHoaDon().toString();
 	}
 
 	@RequestMapping("/user/invoice/{id}")
