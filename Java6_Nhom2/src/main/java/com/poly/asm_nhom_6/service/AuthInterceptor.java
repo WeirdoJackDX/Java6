@@ -24,16 +24,18 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (user == null) {
                 if (uri.startsWith("/user/home/index")
                         || uri.startsWith("/user/contact") || uri.startsWith("/user/search")
-                        || uri.startsWith("/user/detail") || uri.startsWith("/user/signup")) {
+                        || uri.startsWith("/user/detail") || uri.startsWith("/user/signup")
+                        || uri.startsWith("/user/shop")) {
                     return true;
                 }
-                if (uri.startsWith("/admin") || uri.startsWith("/staff")) {
+
+                if (uri.startsWith("/trangchu")) {
                     response.sendRedirect("/error404");
                     return false;
                 }
                 response.sendRedirect("/user/home/index");
                 return false;
-            } else if (uri.contains("admin") || uri.contains("staff")) {
+            } else if (uri.contains("trangchu") && user.getVaiTro() != 1) {
                 response.sendRedirect("/error404");
                 return false;
             }
