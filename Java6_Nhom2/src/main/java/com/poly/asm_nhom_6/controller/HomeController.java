@@ -337,7 +337,7 @@ public class HomeController {
 
 		NguoiDung nguoiDung = nguoiDungService.findByTaiKhoanAndMatKhauLike(taiKhoan, matKhau);
 		// Kiểm tra tài khoản và mật khẩu
-		if (nguoiDung != null && nguoiDung.getIsBanned() == true) {
+		if (nguoiDung != null) {
 			// Đăng nhập thành công
 			session.setAttribute("nguoiDung", nguoiDung);
 			response.put("success", true);

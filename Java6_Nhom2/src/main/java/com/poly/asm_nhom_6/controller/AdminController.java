@@ -28,7 +28,6 @@ import com.poly.asm_nhom_6.DAO.HoaDonDAO;
 import com.poly.asm_nhom_6.DAO.LoaiBanhDAO;
 import com.poly.asm_nhom_6.DAO.NguoiDungDAO;
 import com.poly.asm_nhom_6.DAO.SanPhamDAO;
-
 import com.poly.asm_nhom_6.model.LoaiBanh;
 import com.poly.asm_nhom_6.model.Report;
 import com.poly.asm_nhom_6.model.SanPham;
@@ -57,12 +56,10 @@ public class AdminController {
 		model.addAttribute("tongKH", nguoiDungDAO.findAll().size());
 		model.addAttribute("tongHD", hoaDonDAO.findAll().size());
 		model.addAttribute("tongDT", chiTietHoaDonDAO.tongDoanhThu());
+		List<Report> listHD = hoaDonDAO.getListSP();
+		model.addAttribute("listHD",listHD);
+		System.out.println(listHD);
 		return "admin/index";
-	}
-
-	@GetMapping("trangchu/nguoidung")
-	public String nguoidung() {
-		return "admin/nguoidung";
 	}
 
 	// ==============================LOẠI SAN
@@ -238,7 +235,7 @@ public class AdminController {
 
 		}
 	}
-
+	
 	// Ẩn sản phẩm
 	@RequestMapping("/trangchu/sanpham/an/{id}")
 	public String anSP(Model model, @PathVariable("id") Integer id) {
@@ -256,11 +253,10 @@ public class AdminController {
 		sanphamdao.save(sanpham);
 		return "redirect:/trangchu/sanpham";
 	}
-
 	@RequestMapping("/trangchu/sanpham/delete/{id}")
 	public String delete(Model model, @PathVariable("id") Integer id) {
 		SanPham sanpham = sanphamdao.findById(id).get();
-
+		
 		sanphamdao.delete(sanpham);
 		return "redirect:/trangchu/sanpham";
 	}
