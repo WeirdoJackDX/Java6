@@ -52,6 +52,5 @@ public class ChiTietHoaDon implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "ma_sp")
-	@JsonBackReference
 	SanPham sanPham;
 }
