@@ -2,9 +2,11 @@
 <html class="no-js" lang="" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
-    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -80,48 +82,51 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat=" nd in pager.items">
+                                        <tr ng-repeat="nd in pager.items">
                                             <td>{{nd.maND}}</td>
                                             <td>{{nd.hoTen}}</td>
                                             <td>{{nd.diaChi}}</td>
                                             <td>{{nd.sdt}}</td>
                                             <td>{{nd.email}}</td>
                                             <td>
-                                                <button class="ti-lock"></button>
-                                                <button class="ti-unlock"></button>
+                                                <button ng-show="nd.isBanned" ng-click="banning(nd.maND)"
+                                                    class="ti-lock"></button>
+                                                <button ng-hide="nd.isBanned" ng-click="banning(nd.maND)"
+                                                    class="ti-unlock"></button>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    
+
                                 </table>
                                 <ul class="pagination">
                                     <ul class="pagination">
                                         <li class="page-item">
                                             <a class="page-link" aria-label="Previous">
-                                              <button ng-click="pager.first()">First</button>
-                                             
-                                            </a>
-                                          </li>
-                                        <li class="page-item">
-                                          <a class="page-link" >
-                                            <button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
-                                          </a>
-                                        </li>
+                                                <button ng-click="pager.first()">First</button>
 
-                                        <li class="page-item"><a class="page-link">{{pager.page + 1}} of {{pager.count}}</a></li>
-                                        
-                                        <li class="page-item">
-                                          <a class="page-link">
-                                            <button aria-hidden="true" ng-click="pager.next()">&raquo;</button>                                         
-                                          </a>
+                                            </a>
                                         </li>
                                         <li class="page-item">
                                             <a class="page-link">
-                                              <button ng-click="pager.last()">Last</button>
+                                                <button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
                                             </a>
-                                          </li>
-                                      </ul>
-                                      </ul>
+                                        </li>
+
+                                        <li class="page-item"><a class="page-link">{{pager.page + 1}} of
+                                                {{pager.count}}</a></li>
+
+                                        <li class="page-item">
+                                            <a class="page-link">
+                                                <button aria-hidden="true" ng-click="pager.next()">&raquo;</button>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link">
+                                                <button ng-click="pager.last()">Last</button>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -132,7 +137,7 @@
     </div>
 
     <!-- Right Panel -->
-	<script th:src="@{/js/nguoidung.js}"></script>
+    <script th:src="@{/js/nguoidung.js}"></script>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>

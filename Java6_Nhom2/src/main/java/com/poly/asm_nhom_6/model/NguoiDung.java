@@ -58,6 +58,9 @@ public class NguoiDung implements Serializable {
     @Column(name = "vai_tro")
     Integer vaiTro;
 
+    @Column(name = "is_banned")
+    Boolean isBanned = false;
+
     @JsonIgnore
     @OneToMany(mappedBy = "nguoiDung")
     List<DanhGia> danhGias;

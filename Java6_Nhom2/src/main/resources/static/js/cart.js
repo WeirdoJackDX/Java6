@@ -70,7 +70,7 @@ app.controller('cart-ctrl', function ($scope, $http) {
 			var boolean = true;
 			for (var i = 0; i < $scope.db.products.length; i++) {
 				if ($scope.db.products[i].isChecked === false) {
-					if ($scope.db.products[i].gioHangChiTiet.sanPham.soLuong < 0 || $scope.db.products[i].gioHangChiTiet.sanPham.soLuong >= $scope.db.products[i].gioHangChiTiet.soLuong) {
+					if ($scope.db.products[i].gioHangChiTiet.sanPham.soLuong >= $scope.db.products[i].gioHangChiTiet.soLuong) {
 						boolean = false;
 					}
 				}

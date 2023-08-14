@@ -143,6 +143,8 @@ public class HomeController {
 				} else {
 					demo(nguoiDung.getEmail(), "", "");
 					nguoiDung.setVaiTro(0);
+					nguoiDung.setIsBanned(false);
+					System.out.println(nguoiDung);
 					nguoiDungDAO.save(nguoiDung);
 					this.dangKy = true;
 					return "redirect:/user/home/index";
@@ -326,7 +328,7 @@ public class HomeController {
 
 		NguoiDung nguoiDung = nguoiDungDAO.findByTaiKhoanAndMatKhauLike(taiKhoan, matKhau);
 		// Kiểm tra tài khoản và mật khẩu
-		if (nguoiDung != null) {
+		if (nguoiDung != null && nguoiDung.getIsBanned() == true) {
 			// Đăng nhập thành công
 			session.setAttribute("nguoiDung", nguoiDung);
 			response.put("success", true);

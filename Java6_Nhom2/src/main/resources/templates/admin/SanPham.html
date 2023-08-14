@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Ela Admin - HTML5 Admin Template</title>
+	<title>Love-Cake ADMIN</title>
 	<meta name="description" content="Ela Admin - HTML5 Admin Template">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -56,14 +56,29 @@
 											<label for="image">
 												<img th:src="@{/img/{{form.anh}}}" style="width: 300px; height: 200px">
 											</label>
+											<button ng-show="post" type="submit" class="btn btn-primary btn-sm"
+												ng-click="save()">
+												<i class="fa fa-plus-square"></i> Thêm
+											</button>
+											<button ng-show="put" type="submit" class="btn btn-primary btn-sm"
+												ng-click="update()">
+												<i class="fa fa-dot-circle-o"></i> Cập nhật
+											</button>
+											<button ng-show="deleteShow" type="submit" class="btn btn-danger btn-sm"
+												ng-click="delete(form.maSP)">
+												<i class="fa fa-minus-square"></i> Xóa
+											</button>
+											<button class="btn btn-primary btn-sm" type="submit" ng-click="reset()">
+												<i class="fa fa-refresh"></i> Làm mới
+											</button>
 										</div>
 										<div class="col-sm-8">
 											<div class="row form-group">
 												<div class="col col-md-6">
 													<input type="text" placeholder="Tên" class="form-control"
 														name="tenSP" ng-model="form.tenSP" required>
-													<!-- <div ng-hide="frmSanPham.tenSP.$valid" style="color:brown">Vui lòng
-														nhâp tên Sản Phẩm</div> -->
+													<div ng-hide="frmSanPham.tenSP.$valid" style="color:brown">Không để
+														trống</div>
 												</div>
 
 												<div class="col col-md-6"><input type="text" placeholder="Mã sản phẩm"
@@ -73,16 +88,24 @@
 											<div class="row form-group">
 												<div class="col col-md-4"><input type="number" placeholder="Giá bán"
 														class="form-control" name="giaBan" ng-model="form.giaBan" min=1
-														required></div>
+														required>
+													<div ng-hide="frmSanPham.giaBan.$valid" style="color:brown">Không để
+														trống
+													</div>
+												</div>
 
 												<div class="col col-md-4"><input type="number" placeholder="Giá nhập"
 														class="form-control" name="giaNhap" ng-model="form.giaNhap"
 														min=1 required>
+													<div ng-hide="frmSanPham.giaNhap.$valid" style="color:brown">Không
+														để trống</div>
 												</div>
 
 												<div class="col col-md-4"><input type="number" placeholder="Số lượng"
 														class="form-control" name="soLuong" ng-model="form.soLuong"
 														min=1 required>
+													<div ng-hide="frmSanPham.soLuong.$valid" style="color:brown">Không
+														để trống</div>
 												</div>
 											</div>
 											<div class="row form-group">
@@ -92,36 +115,23 @@
 											</div>
 											<div class="row form-group">
 												<div class="col col-md-6">
-													<select name="disabledSelect" id="disabledSelect"
-														class="form-control" ng-model="form.loaiBanh.maLoaiBanh">
-														<option ng-repeat="option in db.loai"
+													Loại Bánh
+													<select name="loaibanh" class="form-control"
+														ng-model="form.loaiBanh.maLoaiBanh" required>
+														<option ng-repeat="option in db.loai" value="Loại bánh"
 															ng-value="option.maLoaiBanh">
-															{{option.tenLoaiBanh}}</option>
+															{{option.tenLoaiBanh}} </option>
 													</select>
+													<div ng-hide="frmSanPham.loaibanh.$touched" style="color:brown">Loại
+														bánh không để trống</div>
 												</div>
-												<!-- <div class="col col-md-6"><input type="file" class="form-control" name="anh"
-														onchange="angular.element(this).scope().setFile(this)"></div>
-												{{theFile.name}} -->
-												<div class="col col-md-6"><input type="file" class="form-control"
-														name="anh" id="anh"
+
+												<div class="col col-md-6">
+													Ảnh<input type="file" class="form-control" name="anh" id="anh"
 														onchange="angular.element(this).scope().imageChanged(this.files)">
 												</div>
 											</div>
 										</div>
-
-
-										<button type="submit" class="btn btn-primary btn-sm" ng-click="update()"
-											ng-show="put">
-											<i class="fa fa-dot-circle-o"></i> Cập nhật
-										</button>
-										<button type="submit" class="btn btn-primary btn-sm" ng-click="save()"
-											ng-show="post">
-											<i class="fa fa-dot-circle-o"></i> Thêm mới
-										</button>
-
-										<button type="submit" class="btn btn-primary btn-sm" ng-click="reset()">
-											<i class="fa fa-dot-circle-o"></i> Làm mới
-										</button>
 									</form>
 
 								</nav>
@@ -156,7 +166,6 @@
 											<td>{{item.ghiChu}}</td>
 											<td>{{item.giaBan}}</td>
 											<td>{{item.giaNhap}}</td>
-
 											<td>
 												<button ng-click="edit(item.maSP)" class="fa fa-pencil"></button>
 											</td>
@@ -166,7 +175,7 @@
 													ng-show="item.isAvailable == true"></a>
 											</td>
 											<td>
-												<a class="fa fa-remove"></a>
+												<a class="fa fa-remove" ng-click="delete(item.maSP)"></a>
 											</td>
 										</tr>
 								</table>
@@ -181,7 +190,8 @@
 										</li>
 										<li class="page-item">
 											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.pre()">&laquo;</button>
+												<button aria-hidden="true" ng-click="pager.pre()"
+													class="fa fa-hand-o-left"></button></button>
 											</a>
 										</li>
 
@@ -190,7 +200,8 @@
 
 										<li class="page-item">
 											<a class="page-link">
-												<button aria-hidden="true" ng-click="pager.next()">&raquo;</button>
+												<button aria-hidden="true" ng-click="pager.next()"
+													class="fa fa-hand-o-right"></button></button>
 											</a>
 										</li>
 										<li class="page-item">

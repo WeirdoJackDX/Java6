@@ -57,9 +57,6 @@ public class AdminController {
 		model.addAttribute("tongKH", nguoiDungDAO.findAll().size());
 		model.addAttribute("tongHD", hoaDonDAO.findAll().size());
 		model.addAttribute("tongDT", chiTietHoaDonDAO.tongDoanhThu());
-		List<Report> listHD = hoaDonDAO.getListSP();
-		model.addAttribute("listHD", listHD);
-		System.out.println(listHD);
 		return "admin/index";
 	}
 

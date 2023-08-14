@@ -4,6 +4,7 @@ app.controller('sp-ctrl', function ($scope, $http) {
     $scope.form = {};
     $scope.post = true
     $scope.put = false
+    $scope.deleteShow = false
 
     $http.get("/rest/sanpham").then(response => {
         $scope.db = response.data;
@@ -11,6 +12,9 @@ app.controller('sp-ctrl', function ($scope, $http) {
     })
     $scope.reset = function () {
         $scope.form = null;
+        $scope.post = true
+        $scope.put = false
+        $scope.deleteShow = false
     }
     // phân trang
     $scope.pager = {
@@ -49,6 +53,7 @@ app.controller('sp-ctrl', function ($scope, $http) {
     $scope.edit = function (id) {
         $scope.post = false;
         $scope.put = true;
+        $scope.deleteShow = true;
         var url = `/rest/sanpham/${id}`;
         $http.get(url).then(response => {
             $scope.form = response.data;
@@ -56,6 +61,19 @@ app.controller('sp-ctrl', function ($scope, $http) {
             console.log("Error", err)
         })
     }
+
+    $scope.delete = function (id) {
+        $http.delete(`/rest/delete/${id}`).then(response => {
+            var index = $scope.db.sanpham.findIndex(a => a.maSP === $scope.form.maSP);
+            $scope.db.sanpham.splice(index, 1);
+            reset();
+            alert("Xóa thành công");
+        }).catch(error => {
+            alert("Xóa thất bại sản phẩm đã được kinh doanh");
+            console.log("Error", error)
+        })
+    }
+
     $scope.save = function () {
         var index = $scope.db.loai.findIndex(a => a.maLoaiBanh === $scope.form.loaiBanh.maLoaiBanh)
         var item = {
@@ -73,6 +91,9 @@ app.controller('sp-ctrl', function ($scope, $http) {
         $http.post(url, item).then(response => {
             $scope.db.sanpham.push(response.data);
             alert("Thêm sản phẩm thành công")
+        }).catch(error => {
+            alert("Thêm mới thất bại");
+            console.log("Error", error)
         })
 
     }
@@ -97,6 +118,7 @@ app.controller('sp-ctrl', function ($scope, $http) {
             console.log($scope.db[index])
             $scope.db.sanpham[index] = response.data;
             alert("Cập nhật sản phẩm thành công")
+            $scope.reset();
         }).catch(err => {
             alert("Lỗi cập nhật sản phẩm");
             console.log("Error", error);
@@ -117,6 +139,7 @@ app.controller('sp-ctrl', function ($scope, $http) {
         })
     }
 
+
     /*  $scope.setFile = function (element) {
          $scope.$apply(function ($scope) {
            
@@ -124,8 +147,9 @@ app.controller('sp-ctrl', function ($scope, $http) {
          });
      }; */
 
+
     $scope.imageChanged = function (files) {
-        console.log($scope.form);
+
         var data = new FormData();
         data.append('file', files[0]);
         $http.post('/rest/upload/img', data, {
@@ -137,6 +161,7 @@ app.controller('sp-ctrl', function ($scope, $http) {
             alert("Loi up anh");
             console.log("Error", err)
         })
+
     }
 
 })

@@ -66,6 +66,7 @@
 										ng-show="item.gioHangChiTiet.sanPham.soLuong < item.gioHangChiTiet.soLuong && item.gioHangChiTiet.sanPham.soLuong>0">
 										<b style="color: red;">Số lượng cung cấp không đủ vui lòng giảm</b>
 									</p>
+									<p>Kho: {{item.gioHangChiTiet.sanPham.soLuong}}</p>
 								</td>
 								<td class="align-middle">{{item.gioHangChiTiet.sanPham.giaBan | number}}VND</td>
 								<td class="align-middle">
@@ -181,9 +182,11 @@
 
 								<div class="row">
 									<div class="col-md-4 form-group">
-										<button th:formaction="@{/user/info}"
-											class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Thay
-											đổi thông tin?</button>
+										<form method="get" th:action="@{/user/info}">
+											<button
+												class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Thay
+												đổi thông tin?</button>
+										</form>
 									</div>
 
 									<div class="col-md-4 form-group">

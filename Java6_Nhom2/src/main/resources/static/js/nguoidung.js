@@ -16,28 +16,41 @@ app.controller('nguoidung-ctrl', function ($scope, $http) {
             var start = this.page * this.size;
             return $scope.items.slice(start, start + this.size);
         },
-        get count(){
-            return Math.ceil(1.0 * $scope.items.length/this.size);
+        get count() {
+            return Math.ceil(1.0 * $scope.items.length / this.size);
         },
-        first(){
+        first() {
             this.page = 0;
         },
-        pre(){
+        pre() {
             this.page--;
-            if(this.page < 0){
+            if (this.page < 0) {
                 this.last();
             }
         },
-        last(){
-            this.page = this.count -1;
+        last() {
+            this.page = this.count - 1;
         },
-        next(){
-            this.page ++;
-            if(this.page>= this.count){
+        next() {
+            this.page++;
+            if (this.page >= this.count) {
                 this.first();
             }
         }
     }
-    
+
     $scope.initialize()
+
+    $scope.index_of = function (id) {
+        return $scope.items.findIndex(a => a.maND == id);
+    }
+
+    $scope.banning = function (id) {
+        var index = $scope.index_of(id);
+        var item = angular.copy($scope.items[index]);
+        var url = `/rest/nguoidung`
+        $http.put(url, item).then(response => {
+            $scope.items[index] = response.data;
+        })
+    }
 })
